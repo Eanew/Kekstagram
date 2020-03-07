@@ -8,13 +8,15 @@ var MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
-var NAMES = ['Морриган', 'Алистер', 'Лелиана', 'Стэн', 'Шейла', 'Зевран'];
+// var NAMES = ['Морриган', 'Алистер', 'Лелиана', 'Стэн', 'Шейла', 'Зевран'];
+var names = [];
 var avatars = [];
 var AVATAR_URL_TEMPLATE = 'img/avatar-{{случайное число от 1 до 6}}.svg';
 var COMMENTS_COUNT = 6;
 
 for (var i = 0; i < COMMENTS_COUNT; i++) {
   avatars[i] = AVATAR_URL_TEMPLATE.replace('{{случайное число от 1 до 6}}', (i + 1));
+  names[i] = 'User ' + (i + 1); // Зато унисекс
 }
 
 var getRandomCount = function (min, max) {
@@ -27,9 +29,9 @@ var getUniqueRandomItem = function (collection) {
 };
 
 var makeComments = function () {
-  var avatarsCloned = avatars.slice();
   var messagesCloned = MESSAGES.slice();
-  var namesCloned = NAMES.slice();
+  var namesCloned = names.slice();
+  var avatarsCloned = avatars.slice();
   var comments = [];
 
   for (var j = 0; j < COMMENTS_COUNT; j++) {
