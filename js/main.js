@@ -15,9 +15,8 @@ var messages = [
 var names = ['Морриган', 'Алистер', 'Лелиана', 'Стэн', 'Шейла', 'Зевран'];
 var AVATAR_URL_TEMPLATE = 'img/avatar-{{случайное число от 1 до 6}}.svg';
 var avatars = [];
-var i;
 
-for (i = 0; i < commentsCount; i++) {
+for (var i = 0; i < commentsCount; i++) {
   avatars[i] = AVATAR_URL_TEMPLATE.replace('{{случайное число от 1 до 6}}', (i + 1));
 }
 
@@ -31,13 +30,16 @@ var getUniqueRandomItem = function (collection) {
 };
 
 var makeComments = function () {
+  var avatarsCloned = avatars.slice();
+  var messagesCloned = messages.slice();
+  var namesCloned = names.slice();
   var comments = [];
 
-  for (i = 0; i < commentsCount; i++) {
-    comments[i] = {
-      avatar: getUniqueRandomItem(avatars),
-      message: getUniqueRandomItem(messages),
-      name: getUniqueRandomItem(names)
+  for (var j = 0; j < commentsCount; j++) {
+    comments[j] = {
+      avatar: getUniqueRandomItem(avatarsCloned),
+      message: getUniqueRandomItem(messagesCloned),
+      name: getUniqueRandomItem(namesCloned)
     };
   }
 
@@ -46,13 +48,18 @@ var makeComments = function () {
 
 var makePhotos = function () {
   var photos = [];
+  var comments;
+  var commentsAmount;
 
   for (i = 0; i < photosCount; i++) {
+    comments = makeComments();
+    commentsAmount = getRandomCount(1, commentsCount);
+
     photos[i] = {
       url: PHOTO_URL_TEMPLATE.replace('{{i}}', (i + 1)),
       description: 'Описание фотографии', // Не реализовано
       likes: getRandomCount(15, 200),
-      comments: makeComments.slice(0, getRandomCount(1, commentsCount))
+      comments: comments.slice(0, commentsAmount)
     };
   }
 
