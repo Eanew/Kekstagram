@@ -108,10 +108,9 @@ for (i = 0; i < comments.length; i++) {
   comments[i].querySelector('.social__text').textContent = photos[0].comments[i].message;
 }
 
+var commentsCount = bigPicture.querySelector('.social__comment-count');
+var commentsLoader = bigPicture.querySelector('.comments-loader');
+commentsCount.classList.add('hidden');
+commentsLoader.classList.add('hidden');
 
-// var commentPicture = comments.querySelector('.social__picture');
-// var commentText = comments.querySelector('.social__text');
-// commentPicture.src = '{{аватар}}';
-// commentPicture.alt = '{{имя комментатора}}';
-// commentText.textContent = '{{текст комментария}}';
-
+document.querySelector('body').classList.add('modal-open');
