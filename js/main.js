@@ -93,7 +93,7 @@ var makePictures = function () {
 pictures.appendChild(makePictures());
 
 var bigPicture = document.querySelector('.big-picture');
-bigPicture.classList.remove('hidden');
+// bigPicture.classList.remove('hidden');
 bigPicture.querySelector('.big-picture__img').querySelector('img').src = photos[0].url;
 bigPicture.querySelector('.likes-count').textContent = photos[0].likes;
 bigPicture.querySelector('.comments-count').textContent = photos[0].comments.length;
@@ -113,4 +113,45 @@ var commentsLoader = bigPicture.querySelector('.comments-loader');
 commentsCount.classList.add('hidden');
 commentsLoader.classList.add('hidden');
 
-document.querySelector('body').classList.add('modal-open');
+var addModalOpen = function () {
+  document.querySelector('body').classList.add('modal-open');
+};
+
+var removeModalOpen = function () {
+  document.querySelector('body').classList.remove('modal-open');
+};
+
+// addModalOpen();
+
+var uploadForm = document.querySelector('.img-upload__form');
+var uploadInput = uploadForm.querySelector('#upload-file');
+var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
+var overlayCloseButton = uploadOverlay.querySelector('#upload-cancel');
+
+var onOverlayEscPress = function (evt) {
+  if (evt.key === 'Escape') {
+    closeUploadOverlay();
+  }
+};
+
+var openUploadOverlay = function () {
+  uploadOverlay.classList.remove('hidden');
+  addModalOpen();
+  document.addEventListener('keydown', onOverlayEscPress);
+};
+
+var closeUploadOverlay = function () {
+  uploadOverlay.classList.add('hidden');
+  removeModalOpen();
+  uploadInput.value = '';
+  document.removeEventListener('keydown', onOverlayEscPress);
+};
+
+uploadInput.addEventListener('change', function () {
+  openUploadOverlay();
+});
+
+overlayCloseButton.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  closeUploadOverlay();
+});
