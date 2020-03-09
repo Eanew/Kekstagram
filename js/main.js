@@ -8,15 +8,14 @@ var MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
-// var NAMES = ['Морриган', 'Алистер', 'Лелиана', 'Стэн', 'Шейла', 'Зевран'];
-var names = [];
-var avatars = [];
+var NAMES = [];
+var AVATARS = [];
 var AVATAR_URL_TEMPLATE = 'img/avatar-{{случайное число от 1 до 6}}.svg';
 var COMMENTS_COUNT = 6;
 
 for (var i = 0; i < COMMENTS_COUNT; i++) {
-  avatars[i] = AVATAR_URL_TEMPLATE.replace('{{случайное число от 1 до 6}}', (i + 1));
-  names[i] = 'User ' + (i + 1); // Зато унисекс
+  AVATARS[i] = AVATAR_URL_TEMPLATE.replace('{{случайное число от 1 до 6}}', (i + 1));
+  NAMES[i] = 'User ' + (i + 1);
 }
 
 var getRandomCount = function (min, max) {
@@ -29,16 +28,16 @@ var getUniqueRandomItem = function (collection) {
 };
 
 var makeComments = function () {
-  var messagesCloned = MESSAGES.slice();
-  var namesCloned = names.slice();
-  var avatarsCloned = avatars.slice();
+  var clonedMessages = MESSAGES.slice();
+  var clonedNames = NAMES.slice();
+  var clonedAvatars = AVATARS.slice();
   var comments = [];
 
   for (var j = 0; j < COMMENTS_COUNT; j++) {
     comments[j] = {
-      avatar: getUniqueRandomItem(avatarsCloned),
-      message: getUniqueRandomItem(messagesCloned),
-      name: getUniqueRandomItem(namesCloned)
+      avatar: getUniqueRandomItem(clonedAvatars),
+      message: getUniqueRandomItem(clonedMessages),
+      name: getUniqueRandomItem(clonedNames)
     };
   }
 
@@ -48,7 +47,7 @@ var makeComments = function () {
 var PHOTO_URL_TEMPLATE = 'photos/{{i}}.jpg';
 var photosCount = 25;
 
-var makePhotoTemplates = function () {
+var makePhotos = function () {
   var comments = makeComments();
   var commentsAmount = getRandomCount(2, COMMENTS_COUNT);
   var photos = [];
@@ -67,19 +66,19 @@ var makePhotoTemplates = function () {
   return photos;
 };
 
+var photos = makePhotos();
+
 var pictures = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-var renderPicture = function (photoTemplate) {
+var renderPicture = function (photo) {
   var picture = pictureTemplate.cloneNode(true);
-  picture.querySelector('.picture__img').src = photoTemplate.url;
-  picture.querySelector('.picture__likes').textContent = photoTemplate.likes;
-  picture.querySelector('.picture__comments').textContent = photoTemplate.comments.length;
+  picture.querySelector('.picture__img').src = photo.url;
+  picture.querySelector('.picture__likes').textContent = photo.likes;
+  picture.querySelector('.picture__comments').textContent = photo.comments.length;
 
   return picture;
 };
-
-var photos = makePhotoTemplates();
 
 var makePictures = function () {
   var fragment = document.createDocumentFragment();
@@ -128,8 +127,10 @@ var uploadInput = uploadForm.querySelector('#upload-file');
 var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 var overlayCloseButton = uploadOverlay.querySelector('#upload-cancel');
 
-var onOverlayEscPress = function (evt) {
-  if (evt.key === 'Escape') {
+var ESC_KEY = 'Escape';
+
+var uploadOverlayEscPressHandler = function (evt) {
+  if (evt.key === ESC_KEY) {
     closeUploadOverlay();
   }
 };
@@ -137,14 +138,14 @@ var onOverlayEscPress = function (evt) {
 var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
   addModalOpen();
-  document.addEventListener('keydown', onOverlayEscPress);
+  document.addEventListener('keydown', uploadOverlayEscPressHandler);
 };
 
 var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
   removeModalOpen();
   uploadInput.value = '';
-  document.removeEventListener('keydown', onOverlayEscPress);
+  document.removeEventListener('keydown', uploadOverlayEscPressHandler);
 };
 
 uploadInput.addEventListener('change', function () {
