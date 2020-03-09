@@ -180,17 +180,24 @@ var effectPinMouseupHandler = function () {
 effectPin.addEventListener('mouseup', effectPinMouseupHandler);
 
 var effectsList = uploadOverlay.querySelector('.effects__list');
-var effects = effectsList.querySelectorAll('.effects__item');
-
-uploadPreviewImg.classList.add('effects__previwe--none');
+var previewImgClass;
 
 var effectsListChangeHandler = function (evt) {
   var EFFECT_ID_TEMPLATE = 'effect-';
   var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
+
   if (evt.target && evt.target.matches('input[type="radio"]')) {
-    var previewImgClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
+    uploadPreviewImg.classList.remove(previewImgClass);
+    previewImgClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
     uploadPreviewImg.classList.add(previewImgClass);
+
+    if (previewImgClass !== 'effects__preview--none') {
+      effectLevel.classList.remove('hidden');
+    } else {
+      effectLevel.classList.add('hidden');
+    }
   }
 };
 
+effectLevel.classList.add('hidden');
 effectsList.addEventListener('change', effectsListChangeHandler);
