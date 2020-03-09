@@ -156,3 +156,25 @@ overlayCloseButton.addEventListener('click', function (evt) {
   evt.preventDefault();
   closeUploadOverlay();
 });
+
+openUploadOverlay();
+
+var uploadPreview = uploadOverlay.querySelector('.img-upload__preview');
+var uploadPreviewImg = uploadPreview.querySelector('img');
+var effectLevel = uploadOverlay.querySelector('.effect-level');
+var effectLevelInput = effectLevel.querySelector('.effect-level__value');
+var effectLine = effectLevel.querySelector('.effect-level__line');
+var effectPin = effectLine.querySelector('.effect-level__pin');
+
+var getPinPositionInPercent = function () {
+  var effectLineWidth = getComputedStyle(effectLine).width.replace('px', '');
+  var effectPinX = getComputedStyle(effectPin).left.replace('px', '');
+
+  return Math.round(effectPinX / effectLineWidth * 100);
+};
+
+var effectPinMouseupHandler = function () {
+  effectLevelInput.value = getPinPositionInPercent();
+};
+
+effectPin.addEventListener('mouseup', effectPinMouseupHandler);
