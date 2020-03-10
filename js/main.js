@@ -173,10 +173,14 @@ var getPinPositionInPercent = function () {
   return Math.round(effectPinX / effectLineWidth * 100);
 };
 
+
+var fixedEffectValue;
+
 var effectPinMouseupHandler = function () {
   effectLevelInput.value = getPinPositionInPercent();
-  getEffectLevel();
-  console.log(uploadPreviewImg.style.filter);
+  if (effectLevelInput.value !== fixedEffectValue) { // потому что я так и не понял, как правильно симулировать событие 'change' на input[type=number]
+    getEffectLevel();
+  }
 };
 
 effectPin.addEventListener('mouseup', effectPinMouseupHandler);
@@ -185,36 +189,37 @@ effectLevel.classList.add('hidden');
 var defaultEffectLevel = 100;
 var previewImgClass;
 var filterTemplate = {};
-var NUMBERS_DISMATCH = /\D+/g;
+// var NUMBERS_DISMATCH = /\D+/g;
 
-var toggleEffectLevelVisibility = function () {
+var toggleEffectLevel = function () {
   if (previewImgClass !== 'effects__preview--none') {
     effectLevelInput.value = defaultEffectLevel;
+    fixedEffectValue = effectLevelInput.value;
     effectLevel.classList.remove('hidden');
   } else {
     effectLevel.classList.add('hidden');
-    uploadPreviewImg.style.filter = null;
+    uploadPreviewImg.style.filter = '';
+    uploadPreviewImg.style.WebkitFilter = '';
   }
 };
 
-// var fillFilterTemplate = function () {
+var totalValue;
+
+// var getFilterDefaultSettings = function () {
 //   filterTemplate.currentAttribute = getComputedStyle(uploadPreviewImg).filter;
 //   filterTemplate.defaultValue = filterTemplate.currentAttribute.replace(NUMBERS_DISMATCH, '');
 //   filterTemplate.calculableValue = filterTemplate.defaultValue / 100;
 // };
 
-var totalValue;
-
-var fillFilterTemplate = function () {
+var getFilterDefaultSettings = function () {
   for (i = 0; i < filters.length; i++) {
     if (filters[i].filterClass === previewImgClass) {
       filterTemplate.templateStart = filters[i].templateStart;
-      filterTemplate.defaultValue = filters[i].defaultValue;
       filterTemplate.calculableValue = filters[i].defaultValue / 100;
       filterTemplate.templateEnd = filters[i].templateEnd;
       totalValue = filterTemplate.calculableValue * effectLevelInput.value;
       uploadPreviewImg.style.filter = filterTemplate.templateStart + totalValue + filterTemplate.templateEnd;
-      // console.log(filterTemplate);
+      uploadPreviewImg.style.WebkitFilter = filterTemplate.templateStart + totalValue + filterTemplate.templateEnd;
       return;
     }
   }
@@ -224,6 +229,8 @@ var getEffectLevel = function () {
   totalValue = filterTemplate.calculableValue * effectLevelInput.value;
   // uploadPreviewImg.style.filter = filterTemplate.currentAttribute.replace(filterTemplate.defaultValue, totalValue);
   uploadPreviewImg.style.filter = filterTemplate.templateStart + totalValue + filterTemplate.templateEnd;
+  fixedEffectValue = effectLevelInput.value;
+  console.log('значение input number изменилось');
 };
 
 var effectsListChangeHandler = function (evt) {
@@ -234,8 +241,9 @@ var effectsListChangeHandler = function (evt) {
     uploadPreviewImg.classList.remove(previewImgClass);
     previewImgClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
     uploadPreviewImg.classList.add(previewImgClass);
-    toggleEffectLevelVisibility();
-    fillFilterTemplate();
+    toggleEffectLevel();
+    getFilterDefaultSettings();
+    console.log(uploadPreviewImg.style.filter);
   }
 };
 
@@ -243,12 +251,6 @@ var effectsList = uploadOverlay.querySelector('.effects__list');
 effectsList.addEventListener('change', effectsListChangeHandler);
 
 var filters = [{
-  filterClass: 'effects__preview--none',
-  templateStart: '',
-  defaultValue: '',
-  templateEnd: ''
-},
-{
   filterClass: 'effects__preview--chrome',
   templateStart: 'grayscale(',
   defaultValue: 1,
