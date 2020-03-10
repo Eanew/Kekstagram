@@ -175,12 +175,56 @@ var getPinPositionInPercent = function () {
 
 var effectPinMouseupHandler = function () {
   effectLevelInput.value = getPinPositionInPercent();
+  getEffectLevel();
+  console.log(uploadPreviewImg.style.filter);
 };
 
 effectPin.addEventListener('mouseup', effectPinMouseupHandler);
 
-var effectsList = uploadOverlay.querySelector('.effects__list');
+effectLevel.classList.add('hidden');
+var defaultEffectLevel = 100;
 var previewImgClass;
+var filterTemplate = {};
+var NUMBERS_DISMATCH = /\D+/g;
+
+var toggleEffectLevelVisibility = function () {
+  if (previewImgClass !== 'effects__preview--none') {
+    effectLevelInput.value = defaultEffectLevel;
+    effectLevel.classList.remove('hidden');
+  } else {
+    effectLevel.classList.add('hidden');
+    uploadPreviewImg.style.filter = null;
+  }
+};
+
+// var fillFilterTemplate = function () {
+//   filterTemplate.currentAttribute = getComputedStyle(uploadPreviewImg).filter;
+//   filterTemplate.defaultValue = filterTemplate.currentAttribute.replace(NUMBERS_DISMATCH, '');
+//   filterTemplate.calculableValue = filterTemplate.defaultValue / 100;
+// };
+
+var totalValue;
+
+var fillFilterTemplate = function () {
+  for (i = 0; i < filters.length; i++) {
+    if (filters[i].filterClass === previewImgClass) {
+      filterTemplate.templateStart = filters[i].templateStart;
+      filterTemplate.defaultValue = filters[i].defaultValue;
+      filterTemplate.calculableValue = filters[i].defaultValue / 100;
+      filterTemplate.templateEnd = filters[i].templateEnd;
+      totalValue = filterTemplate.calculableValue * effectLevelInput.value;
+      uploadPreviewImg.style.filter = filterTemplate.templateStart + totalValue + filterTemplate.templateEnd;
+      // console.log(filterTemplate);
+      return;
+    }
+  }
+};
+
+var getEffectLevel = function () {
+  totalValue = filterTemplate.calculableValue * effectLevelInput.value;
+  // uploadPreviewImg.style.filter = filterTemplate.currentAttribute.replace(filterTemplate.defaultValue, totalValue);
+  uploadPreviewImg.style.filter = filterTemplate.templateStart + totalValue + filterTemplate.templateEnd;
+};
 
 var effectsListChangeHandler = function (evt) {
   var EFFECT_ID_TEMPLATE = 'effect-';
@@ -190,14 +234,57 @@ var effectsListChangeHandler = function (evt) {
     uploadPreviewImg.classList.remove(previewImgClass);
     previewImgClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
     uploadPreviewImg.classList.add(previewImgClass);
-
-    if (previewImgClass !== 'effects__preview--none') {
-      effectLevel.classList.remove('hidden');
-    } else {
-      effectLevel.classList.add('hidden');
-    }
+    toggleEffectLevelVisibility();
+    fillFilterTemplate();
   }
 };
 
-effectLevel.classList.add('hidden');
+var effectsList = uploadOverlay.querySelector('.effects__list');
 effectsList.addEventListener('change', effectsListChangeHandler);
+
+var filters = [{
+  filterClass: 'effects__preview--none',
+  templateStart: '',
+  defaultValue: '',
+  templateEnd: ''
+},
+{
+  filterClass: 'effects__preview--chrome',
+  templateStart: 'grayscale(',
+  defaultValue: 1,
+  templateEnd: ')'
+},
+{
+  filterClass: 'effects__preview--sepia',
+  templateStart: 'sepia(',
+  defaultValue: 1,
+  templateEnd: ')'
+},
+{
+  filterClass: 'effects__preview--marvin',
+  templateStart: 'invert(',
+  defaultValue: 100,
+  templateEnd: '%)'
+},
+{
+  filterClass: 'effects__preview--phobos',
+  templateStart: 'blur(',
+  defaultValue: 3,
+  templateEnd: 'px)'
+},
+{
+  filterClass: 'effects__preview--heat',
+  templateStart: 'brightness(',
+  defaultValue: 3,
+  templateEnd: ')'
+}];
+
+// меняется тип фильтра => запускается функция перебора фильтров и проверки соответствия объекта
+// совпавший объект перезаписывает своими свойствами внешние переменные
+// событие change на input.value вызывает функцию, которая подставляет в uploadPreviewImg.style.filter расчёт
+// значений совпавшего объекта и значения input.value
+// потом можно проверить изменение переключением фильтра (сброс value до 100%) и mouseup на слайдере (сброс value до 20)
+
+// СДЕЛАЙ МАССИВ ОБЪЕКТОВ с нужными параметрами (свойствами) для каждого типа фильтра,
+// потом можно будет сопоставить этот массив с коллекцией элементов списка effects__list или с чем-то вроде неё
+
