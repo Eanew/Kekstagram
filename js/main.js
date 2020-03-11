@@ -166,11 +166,6 @@ var effectLevelInput = effectLevel.querySelector('.effect-level__value');
 var effectLine = effectLevel.querySelector('.effect-level__line');
 var effectPin = effectLine.querySelector('.effect-level__pin');
 
-var defaultEffectValue = 100;
-var fixedEffectValue;
-var totalValue;
-var previewImgClass;
-
 var effectLineWidth = getComputedStyle(effectLine).width.replace('px', '');
 var effectPinX;
 
@@ -179,37 +174,9 @@ var getPinPositionInPercent = function () {
   return Math.round(effectPinX / effectLineWidth * 100);
 };
 
-var effectPinMouseupHandler = function () {
-  effectLevelInput.value = getPinPositionInPercent();
-  if (effectLevelInput.value !== fixedEffectValue) {
-    setEffectSaturation();
-  }
-};
-
-effectPin.addEventListener('mouseup', effectPinMouseupHandler);
-effectLevel.classList.add('hidden');
-
-var resetFilter = function () {
-  uploadPreviewImg.style.filter = '';
-  uploadPreviewImg.style.WebkitFilter = '';
-
-  if (previewImgClass !== 'effects__preview--none') {
-    effectLevelInput.value = defaultEffectValue;
-    fixedEffectValue = effectLevelInput.value;
-    effectLevel.classList.remove('hidden');
-  } else {
-    effectLevel.classList.add('hidden');
-  }
-};
-
-var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
-var currentFilter = {};
-
-var buildCurrentFilter = function () {
-  currentFilter.attributeString = getComputedStyle(uploadPreviewImg).filter;
-  currentFilter.defaultValue = currentFilter.attributeString.replace(NUMBERS_DISMATCH, '');
-  currentFilter.calculableValue = currentFilter.defaultValue / 100;
-};
+var defaultEffectValue = 100;
+var fixedEffectValue;
+var totalValue;
 
 var setEffectSaturation = function () {
   totalValue = currentFilter.calculableValue * effectLevelInput.value;
@@ -218,17 +185,43 @@ var setEffectSaturation = function () {
   fixedEffectValue = effectLevelInput.value;
 };
 
+var effectPinMouseupHandler = function () {
+  effectLevelInput.value = getPinPositionInPercent();
+  if (effectLevelInput.value !== fixedEffectValue) { // временная имитация события 'change' для effectLevelInput
+    setEffectSaturation();
+  }
+};
+
+effectPin.addEventListener('mouseup', effectPinMouseupHandler);
+effectLevel.classList.add('hidden');
+
+var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
+var currentFilter = {};
+var previewImgClass;
+
+var refreshCurrentFilter = function () {
+  uploadPreviewImg.style.filter = '';
+  uploadPreviewImg.style.WebkitFilter = '';
+  if (previewImgClass !== 'effects__preview--none') {
+    currentFilter.attributeString = getComputedStyle(uploadPreviewImg).filter;
+    currentFilter.defaultValue = currentFilter.attributeString.replace(NUMBERS_DISMATCH, '');
+    currentFilter.calculableValue = currentFilter.defaultValue / 100;
+    effectLevelInput.value = defaultEffectValue;
+    setEffectSaturation();
+    effectLevel.classList.remove('hidden');
+  } else {
+    effectLevel.classList.add('hidden');
+  }
+};
+
 var effectsListChangeHandler = function (evt) {
   var EFFECT_ID_TEMPLATE = 'effect-';
   var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
-
   if (evt.target && evt.target.matches('input[type="radio"]')) {
     uploadPreviewImg.classList.remove(previewImgClass);
     previewImgClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
     uploadPreviewImg.classList.add(previewImgClass);
-    resetFilter();
-    buildCurrentFilter();
-    setEffectSaturation();
+    refreshCurrentFilter();
   }
 };
 
@@ -249,18 +242,16 @@ var switchImgSize = function () {
 };
 switchImgSize();
 
-var buttonSmallerClickHandler = function () {
+buttonSmaller.addEventListener('click', function () {
   if (currentScaleValue > minScaleValue) {
     currentScaleValue -= 25;
     switchImgSize();
   }
-};
-buttonSmaller.addEventListener('click', buttonSmallerClickHandler);
+});
 
-var buttonBiggerClickHandler = function () {
+buttonBigger.addEventListener('click', function () {
   if (currentScaleValue < maxScaleValue) {
     currentScaleValue += 25;
     switchImgSize();
   }
-};
-buttonBigger.addEventListener('click', buttonBiggerClickHandler);
+});
