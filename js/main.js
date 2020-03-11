@@ -202,7 +202,7 @@ var resetFilter = function () {
   }
 };
 
-var NUMBERS_DISMATCH = /(?=\D)[^.]/g;
+var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
 var currentFilter = {};
 
 var buildCurrentFilter = function () {
