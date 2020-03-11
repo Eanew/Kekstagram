@@ -234,3 +234,33 @@ var effectsListChangeHandler = function (evt) {
 
 var effectsList = uploadOverlay.querySelector('.effects__list');
 effectsList.addEventListener('change', effectsListChangeHandler);
+
+var imgScale = uploadOverlay.querySelector('.scale');
+var buttonSmaller = imgScale.querySelector('.scale__control--smaller');
+var buttonBigger = imgScale.querySelector('.scale__control--bigger');
+var ImgScaleInput = imgScale.querySelector('.scale__control--value');
+var minScaleValue = 25;
+var maxScaleValue = 100;
+var currentScaleValue = maxScaleValue;
+
+var switchImgSize = function () {
+  ImgScaleInput.value = currentScaleValue + '%';
+  uploadPreviewImg.style.transform = 'scale(' + currentScaleValue / 100 + ')';
+};
+switchImgSize();
+
+var buttonSmallerClickHandler = function () {
+  if (currentScaleValue > minScaleValue) {
+    currentScaleValue -= 25;
+    switchImgSize();
+  }
+};
+buttonSmaller.addEventListener('click', buttonSmallerClickHandler);
+
+var buttonBiggerClickHandler = function () {
+  if (currentScaleValue < maxScaleValue) {
+    currentScaleValue += 25;
+    switchImgSize();
+  }
+};
+buttonBigger.addEventListener('click', buttonBiggerClickHandler);
