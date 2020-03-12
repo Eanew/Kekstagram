@@ -343,12 +343,15 @@ var checkHashTagsValidity = function () {
       customValidityConstructor += 'Максимальное количество символов в хэш-теге - 20. ';
     }
     if (!isSimilarityFinded) {
-      for (var j = i + 1; j < hashTags.length; j++) {
-        if (!isSimilarityFinded && hashTags[j] === hashTags[i]) {
-          isSimilarityFinded = true;
-          customValidityConstructor += 'Один и тот же хэш-тег нельзя использовать дважды. ';
+      (function () {
+        for (var j = i + 1; j < hashTags.length; j++) {
+          if (hashTags[j] === hashTags[i]) {
+            isSimilarityFinded = true;
+            customValidityConstructor += 'Один и тот же хэш-тег нельзя использовать дважды. ';
+            return;
+          }
         }
-      }
+      })();
     }
   }
   hashTagInput.setCustomValidity(customValidityConstructor);
