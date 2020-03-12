@@ -126,6 +126,32 @@ var uploadForm = document.querySelector('.img-upload__form');
 var uploadInput = uploadForm.querySelector('#upload-file');
 var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 var overlayCloseButton = uploadOverlay.querySelector('#upload-cancel');
+var effectsList = uploadOverlay.querySelector('.effects__list');
+var defaultFilter = effectsList.querySelector('#effect-none');
+var DEFAULT_FILTER_CLASS = 'effects__preview--none';
+var imgFilterClass;
+
+var setDefaultFilter = function () {
+  defaultFilter.checked = true;
+  uploadPreviewImg.classList.remove(imgFilterClass);
+  imgFilterClass = DEFAULT_FILTER_CLASS;
+  uploadPreviewImg.classList.add(imgFilterClass);
+  refreshCurrentFilter();
+};
+
+var setDefaultImgScale = function () {
+  currentScaleValue = maxScaleValue;
+  switchImgSize();
+};
+
+var setDefaultUploadSettings = function () {
+  if (!defaultFilter.checked) {
+    setDefaultFilter();
+  }
+  if (currentScaleValue !== maxScaleValue) {
+    setDefaultImgScale();
+  }
+};
 
 var ESC_KEY = 'Escape';
 
@@ -135,20 +161,26 @@ var uploadOverlayEscPressHandler = function (evt) {
   }
 };
 
+var uploadInputPreviousValue;
+
 var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
   addModalOpen();
+  uploadInputPreviousValue = uploadInput.value;
   document.addEventListener('keydown', uploadOverlayEscPressHandler);
 };
 
 var closeUploadOverlay = function () {
+  document.removeEventListener('keydown', uploadOverlayEscPressHandler);
   uploadOverlay.classList.add('hidden');
   removeModalOpen();
   uploadInput.value = '';
-  document.removeEventListener('keydown', uploadOverlayEscPressHandler);
 };
 
 uploadInput.addEventListener('change', function () {
+  if (uploadInputPreviousValue && (uploadInput.value !== uploadInputPreviousValue)) {
+    setDefaultUploadSettings();
+  }
   openUploadOverlay();
 });
 
@@ -157,7 +189,8 @@ overlayCloseButton.addEventListener('click', function (evt) {
   closeUploadOverlay();
 });
 
-openUploadOverlay(); // временно
+// openUploadOverlay();
+// временно для работы
 
 var uploadPreview = uploadOverlay.querySelector('.img-upload__preview');
 var uploadPreviewImg = uploadPreview.querySelector('img');
@@ -187,7 +220,7 @@ var setEffectSaturation = function () {
 
 var effectPinMouseupHandler = function () {
   effectLevelInput.value = getPinPositionInPercent();
-  if (effectLevelInput.value !== fixedEffectValue) { // временная имитация события 'change' для effectLevelInput
+  if (effectLevelInput.value !== fixedEffectValue) { // имитация события 'change' для effectLevelInput, чтобы вызов setEffectSaturation срабатывал не чаще 100 раз за диапазон движения effectPin
     setEffectSaturation();
   }
 };
@@ -197,12 +230,11 @@ effectLevel.classList.add('hidden');
 
 var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
 var currentFilter = {};
-var previewImgClass;
 
 var refreshCurrentFilter = function () {
   uploadPreviewImg.style.filter = '';
   uploadPreviewImg.style.WebkitFilter = '';
-  if (previewImgClass !== 'effects__preview--none') {
+  if (imgFilterClass !== DEFAULT_FILTER_CLASS) {
     currentFilter.attributeString = getComputedStyle(uploadPreviewImg).filter;
     currentFilter.defaultValue = currentFilter.attributeString.replace(NUMBERS_DISMATCH, '');
     currentFilter.calculableValue = currentFilter.defaultValue / 100;
@@ -218,14 +250,13 @@ var effectsListChangeHandler = function (evt) {
   var EFFECT_ID_TEMPLATE = 'effect-';
   var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
   if (evt.target && evt.target.matches('input[type="radio"]')) {
-    uploadPreviewImg.classList.remove(previewImgClass);
-    previewImgClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
-    uploadPreviewImg.classList.add(previewImgClass);
+    uploadPreviewImg.classList.remove(imgFilterClass);
+    imgFilterClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
+    uploadPreviewImg.classList.add(imgFilterClass);
     refreshCurrentFilter();
   }
 };
 
-var effectsList = uploadOverlay.querySelector('.effects__list');
 effectsList.addEventListener('change', effectsListChangeHandler);
 
 var imgScale = uploadOverlay.querySelector('.scale');
