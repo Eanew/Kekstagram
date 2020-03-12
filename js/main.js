@@ -294,39 +294,87 @@ var descriptionInput = uploadText.querySelector('.text__description');
 var SPACE = ' ';
 var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
 var descriptionCommentMaxLength = 140;
-var isDescriptionInputValid = true;
 var hashTagsMaxLength = 20;
 var hashTagsMaxCount = 5;
 var hashTags;
-var isOkay = true;
 var isHashTagValid;
 
+// Первый вариант функции, рассчитанный на более быструю обработку браузером ->
+
+// var checkHashTagsValidity = function () {
+//   hashTagInput.setCustomValidity('');
+//   hashTags = hashTagInput.value.split(SPACE);
+//   if (hashTags.length <= hashTagsMaxCount) {
+//     for (i = 0; i < hashTags.length; i++) {
+//       isHashTagValid = !hashTags[i].replace(VALID_HASH_TAG_MATCH, '');
+//       if (hashTags[i].length <= hashTagsMaxLength && isHashTagValid) {
+//         for (var j = i + 1; j < hashTags.length; j++) {
+//           if (hashTags[j] === hashTags[i]) {
+//             hashTagInput.setCustomValidity('Один и тот же хэш-тег нельзя использовать дважды. Гореть тебе в аду!');
+//             return;
+//           }
+//         }
+//       } else {
+//         hashTagInput.setCustomValidity('В хэш-тег должна входить решётка и от 1 до 19 букв или чисел после неё. Например, #ХэшTag09. Хэш-теги разделяются пробелами.');
+//         return;
+//       }
+//     }
+//   } else {
+//     hashTagInput.setCustomValidity('Максимальное число хэш-тегов - 5');
+//   }
+// };
+
+// Второй вариант функции, рассчитанный на читабельность кода и более гибкий конструктор .setCustomValidity ->
+
 var checkHashTagsValidity = function () {
-  hashTagInput.setCustomValidity('');
+  var isSimilarityFinded;
+  var customValidityConstructor = '';
+  hashTagInput.setCustomValidity(customValidityConstructor);
   hashTags = hashTagInput.value.split(SPACE);
-  isOkay = true;
-  if (hashTags.length <= hashTagsMaxCount) { // 1 проверка
-    for (i = 0; i < hashTags.length; i++) {
-      isHashTagValid = !hashTags[i].replace(VALID_HASH_TAG_MATCH, ''); // это пока единственное, что пришло в голову
-      if (hashTags[i].length <= hashTagsMaxLength && isHashTagValid) { // 2, 3
-        for (var j = i + 1; j < hashTags.length; j++) {
-          if (hashTags[j] === hashTags[i]) { // 4
-            hashTagInput.setCustomValidity('Один и тот же хэш-тег нельзя использовать дважды. Гореть тебе в аду!');
-            isOkay = false;
-            return;
-          }
-        }
-      } else {
-        hashTagInput.setCustomValidity('В хэш-тег должна входить решётка и от 1 до 19 букв или чисел после неё. Например, #ХэшTag09. Хэш-теги разделяются пробелами.');
-        isOkay = false;
-        return;
-      }
-    }
-  } else {
-    hashTagInput.setCustomValidity('Максимальное число хэш-тегов - 5');
-    isOkay = false;
-    return;
+
+  if (hashTags.length > hashTagsMaxCount) { // Проверка на количество хэш-тегов
+    customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами.';
   }
+
+  for (i = 0; i < hashTags.length; i++) {
+    isHashTagValid = !hashTags[i].replace(VALID_HASH_TAG_MATCH, '');
+
+    if (hashTags[i].length > hashTagsMaxLength) { // Проверка на количество символов в хэш-тегах
+      if (customValidityConstructor) {
+        customValidityConstructor += SPACE;
+      }
+      customValidityConstructor += 'Максимальное количество символов в хэш-теге - 20.';
+    }
+
+    if (!isHashTagValid) { // Проверка хэш-тегов на валидность в символах
+      if (customValidityConstructor) {
+        customValidityConstructor += SPACE;
+      }
+      customValidityConstructor += 'Хэш-тег начинается с решётки (#) и состоит из цифр и букв, в т.ч. заглавных.';
+    }
+
+    var checkHashTagSimilarity = function () {
+      for (var j = i + 1; j < hashTags.length; j++) {
+        if (hashTags[j] === hashTags[i]) { // Проверка на одинаковые хэш-теги
+          isSimilarityFinded = true;
+          return;
+        }
+      }
+    };
+
+    if (!isSimilarityFinded) {
+      checkHashTagSimilarity();
+    }
+  }
+
+  if (isSimilarityFinded) {
+    if (customValidityConstructor) {
+      customValidityConstructor += SPACE;
+    }
+    customValidityConstructor += 'Один и тот же хэш-тег нельзя использовать дважды.';
+  }
+
+  hashTagInput.setCustomValidity(customValidityConstructor);
 };
 
 hashTagInput.addEventListener('change', function () {
@@ -335,10 +383,8 @@ hashTagInput.addEventListener('change', function () {
 
 var checkDescriptionValidity = function () {
   descriptionInput.setCustomValidity('');
-  isDescriptionInputValid = true;
   if (descriptionInput.value.length > descriptionCommentMaxLength) {
     descriptionInput.setCustomValidity('Максимальная длина комментария - 140 символов.');
-    isDescriptionInputValid = false;
   }
 };
 
@@ -353,9 +399,3 @@ uploadText.addEventListener('keydown', function (evt) {
 });
 
 uploadForm.setAttribute('action', 'https://js.dump.academy/kekstagram');
-
-uploadForm.addEventListener('submit', function () {
-  if (isOkay && isDescriptionInputValid) {
-    // console.log('its realy fine');
-  }
-});
