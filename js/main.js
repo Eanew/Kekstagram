@@ -299,33 +299,6 @@ var hashTagsMaxCount = 5;
 var hashTags;
 var isHashTagValid;
 
-// Первый вариант функции, рассчитанный на более быструю обработку браузером ->
-
-// var checkHashTagsValidity = function () {
-//   hashTagInput.setCustomValidity('');
-//   hashTags = hashTagInput.value.split(SPACE);
-//   if (hashTags.length <= hashTagsMaxCount) {
-//     for (i = 0; i < hashTags.length; i++) {
-//       isHashTagValid = !hashTags[i].replace(VALID_HASH_TAG_MATCH, '');
-//       if (hashTags[i].length <= hashTagsMaxLength && isHashTagValid) {
-//         for (var j = i + 1; j < hashTags.length; j++) {
-//           if (hashTags[j] === hashTags[i]) {
-//             hashTagInput.setCustomValidity('Один и тот же хэш-тег нельзя использовать дважды. Гореть тебе в аду!');
-//             return;
-//           }
-//         }
-//       } else {
-//         hashTagInput.setCustomValidity('В хэш-тег должна входить решётка и от 1 до 19 букв или чисел после неё. Например, #ХэшTag09. Хэш-теги разделяются пробелами.');
-//         return;
-//       }
-//     }
-//   } else {
-//     hashTagInput.setCustomValidity('Максимальное число хэш-тегов - 5');
-//   }
-// };
-
-// Второй вариант функции, рассчитанный на читабельность кода и более гибкий конструктор .setCustomValidity ->
-
 var checkHashTagsValidity = function () {
   var isSimilarityFinded;
   var customValidityConstructor = '';
