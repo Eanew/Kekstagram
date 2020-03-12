@@ -354,9 +354,8 @@ uploadText.addEventListener('keydown', function (evt) {
 
 uploadForm.setAttribute('action', 'https://js.dump.academy/kekstagram');
 
-// uploadForm.addEventListener('submit', function (evt) {
-//   evt.preventDefault();
-//   if (isOkay && isDescriptionInputValid) {
-//     console.log('its realy fine');
-//   }
-// });
+uploadForm.addEventListener('submit', function () {
+  if (isOkay && isDescriptionInputValid) {
+    // console.log('its realy fine');
+  }
+});
