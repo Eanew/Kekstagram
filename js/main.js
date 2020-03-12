@@ -331,49 +331,26 @@ var checkHashTagsValidity = function () {
   var customValidityConstructor = '';
   hashTagInput.setCustomValidity(customValidityConstructor);
   hashTags = hashTagInput.value.split(SPACE);
-
-  if (hashTags.length > hashTagsMaxCount) { // Проверка на количество хэш-тегов
-    customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами.';
+  if (hashTags.length > hashTagsMaxCount) {
+    customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами. ';
   }
-
   for (i = 0; i < hashTags.length; i++) {
     isHashTagValid = !hashTags[i].replace(VALID_HASH_TAG_MATCH, '');
-
-    if (hashTags[i].length > hashTagsMaxLength) { // Проверка на количество символов в хэш-тегах
-      if (customValidityConstructor) {
-        customValidityConstructor += SPACE;
-      }
-      customValidityConstructor += 'Максимальное количество символов в хэш-теге - 20.';
+    if (!isHashTagValid) {
+      customValidityConstructor += 'Хэш-тег начинается с решётки (#) и состоит из цифр и букв, в т.ч. заглавных. ';
     }
-
-    if (!isHashTagValid) { // Проверка хэш-тегов на валидность в символах
-      if (customValidityConstructor) {
-        customValidityConstructor += SPACE;
-      }
-      customValidityConstructor += 'Хэш-тег начинается с решётки (#) и состоит из цифр и букв, в т.ч. заглавных.';
+    if (hashTags[i].length > hashTagsMaxLength) {
+      customValidityConstructor += 'Максимальное количество символов в хэш-теге - 20. ';
     }
-
-    var checkHashTagSimilarity = function () {
+    if (!isSimilarityFinded) {
       for (var j = i + 1; j < hashTags.length; j++) {
-        if (hashTags[j] === hashTags[i]) { // Проверка на одинаковые хэш-теги
+        if (!isSimilarityFinded && hashTags[j] === hashTags[i]) {
           isSimilarityFinded = true;
-          return;
+          customValidityConstructor += 'Один и тот же хэш-тег нельзя использовать дважды. ';
         }
       }
-    };
-
-    if (!isSimilarityFinded) {
-      checkHashTagSimilarity();
     }
   }
-
-  if (isSimilarityFinded) {
-    if (customValidityConstructor) {
-      customValidityConstructor += SPACE;
-    }
-    customValidityConstructor += 'Один и тот же хэш-тег нельзя использовать дважды.';
-  }
-
   hashTagInput.setCustomValidity(customValidityConstructor);
 };
 
