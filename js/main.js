@@ -70,6 +70,8 @@ var makePhotoTemplates = function () {
 var pictures = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
+var photos = makePhotoTemplates();
+
 var renderPicture = function (photoTemplate) {
   var picture = pictureTemplate.cloneNode(true);
   picture.querySelector('.picture__img').src = photoTemplate.url;
@@ -81,10 +83,9 @@ var renderPicture = function (photoTemplate) {
 
 var makePictures = function () {
   var fragment = document.createDocumentFragment();
-  var photos = makePhotoTemplates();
-  for (i = 0; i < photos.length; i++) {
-    fragment.appendChild(renderPicture(photos[i]));
-  }
+  photos.forEach(function (photo) {
+    fragment.appendChild(renderPicture(photo));
+  });
 
   return fragment;
 };
