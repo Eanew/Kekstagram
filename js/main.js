@@ -82,9 +82,9 @@ var renderPicture = function (photo) {
 
 var makePictures = function () {
   var fragment = document.createDocumentFragment();
-  for (i = 0; i < photos.length; i++) {
-    fragment.appendChild(renderPicture(photos[i]));
-  }
+  photos.forEach(function (photo) {
+    fragment.appendChild(renderPicture(photo));
+  });
 
   return fragment;
 };
