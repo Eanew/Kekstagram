@@ -189,7 +189,7 @@ overlayCloseButton.addEventListener('click', function (evt) {
   closeUploadOverlay();
 });
 
-// openUploadOverlay();
+openUploadOverlay();
 // временно для работы
 
 var uploadPreview = uploadOverlay.querySelector('.img-upload__preview');
@@ -286,3 +286,77 @@ buttonBigger.addEventListener('click', function () {
     switchImgSize();
   }
 });
+
+var uploadText = uploadOverlay.querySelector('.img-upload__text');
+var hashTagInput = uploadText.querySelector('.text__hashtags');
+var descriptionInput = uploadText.querySelector('.text__description');
+
+var SPACE = ' ';
+var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
+var descriptionCommentMaxLength = 140;
+var isDescriptionInputValid = true;
+var hashTagsMaxLength = 20;
+var hashTagsMaxCount = 5;
+var hashTags;
+var isOkay = true;
+var isHashTagValid;
+
+var checkHashTagsValidity = function () {
+  hashTagInput.setCustomValidity('');
+  hashTags = hashTagInput.value.split(SPACE);
+  isOkay = true;
+  if (hashTags.length <= hashTagsMaxCount) { // 1 проверка
+    for (i = 0; i < hashTags.length; i++) {
+      isHashTagValid = !hashTags[i].replace(VALID_HASH_TAG_MATCH, ''); // это пока единственное, что пришло в голову
+      if (hashTags[i].length <= hashTagsMaxLength && isHashTagValid) { // 2, 3
+        for (var j = i + 1; j < hashTags.length; j++) {
+          if (hashTags[j] === hashTags[i]) { // 4
+            hashTagInput.setCustomValidity('Один и тот же хэш-тег нельзя использовать дважды. Гореть тебе в аду!');
+            isOkay = false;
+            return;
+          }
+        }
+      } else {
+        hashTagInput.setCustomValidity('В хэш-тег должна входить решётка и от 1 до 19 букв или чисел после неё. Например, #ХэшTag09. Хэш-теги разделяются пробелами.');
+        isOkay = false;
+        return;
+      }
+    }
+  } else {
+    hashTagInput.setCustomValidity('Максимальное число хэш-тегов - 5');
+    isOkay = false;
+    return;
+  }
+};
+
+hashTagInput.addEventListener('change', function () {
+  checkHashTagsValidity();
+});
+
+var checkDescriptionValidity = function () {
+  descriptionInput.setCustomValidity('');
+  isDescriptionInputValid = true;
+  if (descriptionInput.value.length > descriptionCommentMaxLength) {
+    descriptionInput.setCustomValidity('Максимальная длина комментария - 140 символов.');
+    isDescriptionInputValid = false;
+  }
+};
+
+descriptionInput.addEventListener('change', function () {
+  checkDescriptionValidity();
+});
+
+uploadText.addEventListener('keydown', function (evt) {
+  if (evt.key === ESC_KEY) {
+    evt.stopPropagation();
+  }
+});
+
+uploadForm.setAttribute('action', 'https://js.dump.academy/kekstagram');
+
+// uploadForm.addEventListener('submit', function (evt) {
+//   evt.preventDefault();
+//   if (isOkay && isDescriptionInputValid) {
+//     console.log('its realy fine');
+//   }
+// });
