@@ -189,7 +189,7 @@ overlayCloseButton.addEventListener('click', function (evt) {
   closeUploadOverlay();
 });
 
-openUploadOverlay();
+// openUploadOverlay();
 // временно для работы
 
 var uploadPreview = uploadOverlay.querySelector('.img-upload__preview');
