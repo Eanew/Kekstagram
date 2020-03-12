@@ -1,5 +1,13 @@
 'use strict';
 
+var SPACE = ' ';
+var ESC_KEY = 'Escape';
+var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
+var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
+var PHOTO_URL_TEMPLATE = 'photos/{{i}}.jpg';
+var EFFECT_ID_TEMPLATE = 'effect-';
+var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
+var DEFAULT_FILTER_CLASS = 'effects__preview--none';
 var MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -44,7 +52,6 @@ var makeComments = function () {
   return comments;
 };
 
-var PHOTO_URL_TEMPLATE = 'photos/{{i}}.jpg';
 var photosCount = 25;
 
 var makePhotos = function () {
@@ -128,7 +135,6 @@ var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 var overlayCloseButton = uploadOverlay.querySelector('#upload-cancel');
 var effectsList = uploadOverlay.querySelector('.effects__list');
 var defaultFilter = effectsList.querySelector('#effect-none');
-var DEFAULT_FILTER_CLASS = 'effects__preview--none';
 var imgFilterClass;
 
 var setDefaultFilter = function () {
@@ -152,8 +158,6 @@ var setDefaultUploadSettings = function () {
     setDefaultImgScale();
   }
 };
-
-var ESC_KEY = 'Escape';
 
 var uploadOverlayEscPressHandler = function (evt) {
   if (evt.key === ESC_KEY) {
@@ -228,7 +232,6 @@ var effectPinMouseupHandler = function () {
 effectPin.addEventListener('mouseup', effectPinMouseupHandler);
 effectLevel.classList.add('hidden');
 
-var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
 var currentFilter = {};
 
 var refreshCurrentFilter = function () {
@@ -247,8 +250,6 @@ var refreshCurrentFilter = function () {
 };
 
 var effectsListChangeHandler = function (evt) {
-  var EFFECT_ID_TEMPLATE = 'effect-';
-  var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
   if (evt.target && evt.target.matches('input[type="radio"]')) {
     uploadPreviewImg.classList.remove(imgFilterClass);
     imgFilterClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
@@ -291,8 +292,6 @@ var uploadText = uploadOverlay.querySelector('.img-upload__text');
 var hashTagInput = uploadText.querySelector('.text__hashtags');
 var descriptionInput = uploadText.querySelector('.text__description');
 
-var SPACE = ' ';
-var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
 var descriptionCommentMaxLength = 140;
 var hashTagsMaxLength = 20;
 var hashTagsMaxCount = 5;
