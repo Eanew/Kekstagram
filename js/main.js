@@ -103,26 +103,40 @@ var makePictures = function () {
 
 pictures.appendChild(makePictures());
 
-var bigPicture = document.querySelector('.big-picture');
-// bigPicture.classList.remove('hidden');
-bigPicture.querySelector('.big-picture__img').querySelector('img').src = photos[0].url;
-bigPicture.querySelector('.likes-count').textContent = photos[0].likes;
-bigPicture.querySelector('.comments-count').textContent = photos[0].comments.length;
-bigPicture.querySelector('.social__caption').textContent = photos[0].description;
+// Начало блока bigPicture
 
+var bigPicture = document.querySelector('.big-picture');
 var commentsList = bigPicture.querySelector('.social__comments');
 var comments = commentsList.querySelectorAll('.social__comment');
 
-for (i = 0; i < comments.length; i++) {
-  comments[i].querySelector('.social__picture').src = photos[0].comments[i].avatar;
-  comments[i].querySelector('.social__picture').alt = photos[0].comments[i].name;
-  comments[i].querySelector('.social__text').textContent = photos[0].comments[i].message;
-}
+var picturesClickHandler = function (evt) {
+  if (evt.target && evt.target.classList.contains('picture__img')) {
+    evt.preventDefault();
 
-var commentsCount = bigPicture.querySelector('.social__comment-count');
-var commentsLoader = bigPicture.querySelector('.comments-loader');
-commentsCount.classList.add('hidden');
-commentsLoader.classList.add('hidden');
+    var pictureIndex = evt.target.getAttribute('src').replace(NUMBERS_DISMATCH, '') - 1;
+
+    bigPicture.querySelector('.big-picture__img').querySelector('img').src = photos[pictureIndex].url;
+    bigPicture.querySelector('.likes-count').textContent = photos[pictureIndex].likes;
+    bigPicture.querySelector('.comments-count').textContent = photos[pictureIndex].comments.length;
+    bigPicture.querySelector('.social__caption').textContent = photos[pictureIndex].description;
+
+    for (i = 0; i < comments.length; i++) {
+      comments[i].querySelector('.social__picture').src = photos[pictureIndex].comments[i].avatar;
+      comments[i].querySelector('.social__picture').alt = photos[pictureIndex].comments[i].name;
+      comments[i].querySelector('.social__text').textContent = photos[pictureIndex].comments[i].message;
+    }
+
+    bigPicture.classList.remove('hidden');
+    addModalOpen();
+  }
+};
+
+pictures.addEventListener('click', picturesClickHandler);
+
+bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+bigPicture.querySelector('.comments-loader').classList.add('hidden');
+
+// Конец блока bigPicture
 
 var addModalOpen = function () {
   document.querySelector('body').classList.add('modal-open');
@@ -172,7 +186,7 @@ var uploadInputPreviousValue;
 
 var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
-  defaultFilter.focus();
+  buttonSmaller.focus();
   addModalOpen();
   uploadInputPreviousValue = uploadInput.value;
   document.addEventListener('keydown', uploadOverlayEscPressHandler);
@@ -232,12 +246,19 @@ var setEffectLevelValue = function () {
 };
 
 effectPin.setAttribute('tabindex', '');
-effectLine.setAttribute('tabindex', '0');
+effectLevel.setAttribute('tabindex', '0');
 
-effectLine.addEventListener('mousedown', function (evt) {
-  // evt.preventDefault();
-  var startCoordX = evt.clientX;
-  var effectPinNewPosition = startCoordX - effectLine.getBoundingClientRect().left;
+effectLevel.addEventListener('mousedown', function (evt) {
+  var startCoordX;
+  var effectLineStart = effectLine.getBoundingClientRect().left;
+  if ((evt.clientX - effectLineStart) >= 0 && evt.clientX <= (effectLineStart + effectLineWidth)) {
+    startCoordX = evt.clientX;
+  } else if ((evt.clientX - effectLineStart) < 0) {
+    startCoordX = effectLineStart;
+  } else {
+    startCoordX = effectLineStart + effectLineWidth;
+  }
+  var effectPinNewPosition = startCoordX - effectLineStart;
   effectPin.style.left = effectPinNewPosition + 'px';
   setEffectLevelValue();
 
@@ -265,7 +286,7 @@ effectLine.addEventListener('mousedown', function (evt) {
   document.addEventListener('mouseup', effectPinMouseupHandler);
 });
 
-effectLine.addEventListener('keydown', function (evt) {
+effectLevel.addEventListener('keydown', function (evt) {
   var pinDirection;
 
   var movePin = function () {
@@ -304,7 +325,7 @@ var refreshCurrentFilter = function () {
     currentFilter.defaultValue = currentFilter.attributeString.replace(NUMBERS_DISMATCH, '');
     currentFilter.calculableValue = currentFilter.defaultValue / 100;
     effectLevel.classList.remove('hidden');
-    effectLineWidth = getComputedStyle(effectLine).width.replace('px', '');
+    effectLineWidth = +getComputedStyle(effectLine).width.replace('px', '');
     effectPin.style.left = effectLineWidth + 'px';
     setEffectLevelValue();
   } else {
