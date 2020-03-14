@@ -230,9 +230,12 @@ var setEffectLevelValue = function () {
   }
 };
 
-effectPin.addEventListener('mousedown', function (evt) {
-  evt.preventDefault();
+effectLine.addEventListener('mousedown', function (evt) {
+  // evt.preventDefault();
   var startCoordX = evt.clientX;
+  var effectPinNewPosition = startCoordX - effectLine.getBoundingClientRect().left;
+  effectPin.style.left = effectPinNewPosition + 'px';
+  setEffectLevelValue();
 
   var effectPinMoveHandler = function (moveEvt) {
     moveEvt.preventDefault();
@@ -254,7 +257,6 @@ effectPin.addEventListener('mousedown', function (evt) {
     document.removeEventListener('mousemove', effectPinMoveHandler);
     document.removeEventListener('mouseup', effectPinMouseupHandler);
   };
-
   document.addEventListener('mousemove', effectPinMoveHandler);
   document.addEventListener('mouseup', effectPinMouseupHandler);
 });
