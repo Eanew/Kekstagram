@@ -171,6 +171,7 @@ var uploadInputPreviousValue;
 
 var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
+  defaultFilter.focus();
   addModalOpen();
   uploadInputPreviousValue = uploadInput.value;
   document.addEventListener('keydown', uploadOverlayEscPressHandler);
@@ -267,24 +268,30 @@ effectLine.addEventListener('mousedown', function (evt) {
 });
 
 effectLine.addEventListener('keydown', function (evt) {
-  var pinDirection = 0;
+  var pinDirection;
+
+  var movePin = function () {
+    var pinStep = effectLineWidth / 50;
+    var shiftX = pinDirection * pinStep;
+    var totalX = +effectPin.style.left.replace('px', '') + shiftX;
+    if (totalX < 0) {
+      totalX = 0;
+    }
+    if (totalX > effectLineWidth) {
+      totalX = effectLineWidth;
+    }
+    effectPin.style.left = totalX + 'px';
+    setEffectLevelValue();
+  };
+
   if (evt.key === ARROW_LEFT_KEY) {
     pinDirection = -1;
+    movePin();
   }
   if (evt.key === ARROW_RIGHT_KEY) {
     pinDirection = 1;
+    movePin();
   }
-  var pinStep = effectLineWidth / 50;
-  var shiftX = pinDirection * pinStep;
-  var totalX = +effectPin.style.left.replace('px', '') + shiftX;
-  if (totalX < 0) {
-    totalX = 0;
-  }
-  if (totalX > effectLineWidth) {
-    totalX = effectLineWidth;
-  }
-  effectPin.style.left = totalX + 'px';
-  setEffectLevelValue();
 });
 
 effectLevel.classList.add('hidden');
