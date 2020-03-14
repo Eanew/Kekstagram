@@ -201,17 +201,17 @@ var uploadPreviewImg = uploadPreview.querySelector('img');
 var effectLevel = uploadOverlay.querySelector('.effect-level');
 var effectLevelInput = effectLevel.querySelector('.effect-level__value');
 var effectLine = effectLevel.querySelector('.effect-level__line');
+var effectDepth = effectLine.querySelector('.effect-level__depth');
 var effectPin = effectLine.querySelector('.effect-level__pin');
 
-var effectLineWidth = getComputedStyle(effectLine).width.replace('px', '');
+var effectLineWidth;
 var effectPinX;
 
 var getPinPositionInPercent = function () {
-  effectPinX = getComputedStyle(effectPin).left.replace('px', '');
+  effectPinX = effectPin.style.left.replace('px', '');
   return Math.round(effectPinX / effectLineWidth * 100);
 };
 
-var defaultEffectValue = 100;
 var fixedEffectValue;
 var totalValue;
 
@@ -222,14 +222,43 @@ var setEffectSaturation = function () {
   fixedEffectValue = effectLevelInput.value;
 };
 
-var effectPinMouseupHandler = function () {
+var setEffectLevelValue = function () {
+  effectDepth.style.width = effectPin.style.left;
   effectLevelInput.value = getPinPositionInPercent();
-  if (effectLevelInput.value !== fixedEffectValue) { // имитация события 'change' для effectLevelInput, чтобы вызов setEffectSaturation срабатывал не чаще 100 раз за диапазон движения effectPin
+  if (effectLevelInput.value !== fixedEffectValue) {
     setEffectSaturation();
   }
 };
 
-effectPin.addEventListener('mouseup', effectPinMouseupHandler);
+effectPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  var startCoordX = evt.clientX;
+
+  var effectPinMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shiftX = moveEvt.clientX - startCoordX;
+    var totalX = +effectPin.style.left.replace('px', '') + shiftX;
+    if (totalX >= 0 && totalX <= effectLineWidth) {
+      startCoordX = moveEvt.clientX;
+    } else if (totalX < 0) {
+      totalX = 0;
+    } else {
+      totalX = effectLineWidth;
+    }
+    effectPin.style.left = totalX + 'px';
+    setEffectLevelValue();
+  };
+
+  var effectPinMouseupHandler = function (mouseUpEvt) {
+    mouseUpEvt.preventDefault();
+    document.removeEventListener('mousemove', effectPinMoveHandler);
+    document.removeEventListener('mouseup', effectPinMouseupHandler);
+  };
+
+  document.addEventListener('mousemove', effectPinMoveHandler);
+  document.addEventListener('mouseup', effectPinMouseupHandler);
+});
+
 effectLevel.classList.add('hidden');
 
 var currentFilter = {};
@@ -241,9 +270,10 @@ var refreshCurrentFilter = function () {
     currentFilter.attributeString = getComputedStyle(uploadPreviewImg).filter;
     currentFilter.defaultValue = currentFilter.attributeString.replace(NUMBERS_DISMATCH, '');
     currentFilter.calculableValue = currentFilter.defaultValue / 100;
-    effectLevelInput.value = defaultEffectValue;
-    setEffectSaturation();
     effectLevel.classList.remove('hidden');
+    effectLineWidth = getComputedStyle(effectLine).width.replace('px', '');
+    effectPin.style.left = effectLineWidth + 'px';
+    setEffectLevelValue();
   } else {
     effectLevel.classList.add('hidden');
   }
