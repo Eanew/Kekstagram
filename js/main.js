@@ -1,12 +1,12 @@
 'use strict';
 
 var SPACE = ' ';
-var ENTER_KEY = 'Enter';
 var ESC_KEY = 'Escape';
 var ARROW_LEFT_KEY = 'ArrowLeft';
 var ARROW_RIGHT_KEY = 'ArrowRight';
 var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
 var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
+var EMPTY_SPACE = /\s+/g;
 var PHOTO_URL_TEMPLATE = 'photos/{{i}}.jpg';
 var EFFECT_ID_TEMPLATE = 'effect-';
 var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
@@ -68,7 +68,7 @@ var makePhotos = function () {
   for (i = 0; i < photosCount; i++) {
     photos[i] = {
       url: PHOTO_URL_TEMPLATE.replace('{{i}}', (i + 1)),
-      description: 'Описание фотографии',
+      description: 'Это фотография!',
       likes: getRandomCount(15, 200),
       comments: comments.slice(0, commentsAmount)
     };
@@ -104,11 +104,12 @@ var makePictures = function () {
 
 pictures.appendChild(makePictures());
 
-// Начало блока bigPicture
-
+var previewPictures = pictures.querySelectorAll('.picture');
 var bigPicture = document.querySelector('.big-picture');
+var bigPictureCancelButton = bigPicture.querySelector('.big-picture__cancel');
 var commentsList = bigPicture.querySelector('.social__comments');
 var comments = commentsList.querySelectorAll('.social__comment');
+var selectedPicture;
 var pictureIndex;
 
 var openBigPicture = function () {
@@ -129,25 +130,17 @@ var openBigPicture = function () {
   document.addEventListener('keydown', bigPictureEscPressHandler);
 };
 
-pictures.addEventListener('click', function (evt) {
-  if (evt.target && evt.target.classList.contains('picture__img')) {
-    evt.preventDefault();
-    pictureIndex = evt.target.getAttribute('src').replace(NUMBERS_DISMATCH, '') - 1;
-    openBigPicture();
-  }
-});
+var previewPictureClickHandler = function (evt) {
+  evt.preventDefault();
+  evt.stopPropagation();
+  selectedPicture = evt.currentTarget;
+  pictureIndex = selectedPicture.querySelector('.picture__img').getAttribute('src').replace(NUMBERS_DISMATCH, '') - 1;
+  openBigPicture();
+};
 
-pictures.addEventListener('keydown', function (evt) {
-  if (evt.target && evt.target.classList.contains('picture')) {
-    if (evt.key === SPACE || evt.key === ENTER_KEY) {
-      evt.preventDefault();
-      pictureIndex = evt.target.querySelector('img').getAttribute('src').replace(NUMBERS_DISMATCH, '') - 1;
-      openBigPicture();
-    }
-  }
-});
-
-var bigPictureCancelButton = bigPicture.querySelector('.big-picture__cancel');
+for (i = 0; i < previewPictures.length; i++) {
+  previewPictures[i].addEventListener('click', previewPictureClickHandler);
+}
 
 bigPictureCancelButton.addEventListener('click', function (evt) {
   evt.preventDefault();
@@ -163,13 +156,12 @@ var bigPictureEscPressHandler = function (evt) {
 var closeBigPicture = function () {
   document.removeEventListener('keydown', bigPictureEscPressHandler);
   bigPicture.classList.add('hidden');
+  selectedPicture.focus();
   removeModalOpen();
 };
 
 bigPicture.querySelector('.social__comment-count').classList.add('hidden');
 bigPicture.querySelector('.comments-loader').classList.add('hidden');
-
-// Конец блока bigPicture
 
 var addModalOpen = function () {
   document.querySelector('body').classList.add('modal-open');
@@ -419,6 +411,7 @@ var checkHashTagsValidity = function () {
   var isSimilarityFinded;
   var customValidityConstructor = '';
   hashTagInput.setCustomValidity(customValidityConstructor);
+  hashTagInput.value = hashTagInput.value.replace(EMPTY_SPACE, SPACE);
   hashTags = hashTagInput.value.split(SPACE);
   if (hashTags.length > hashTagsMaxCount) {
     customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами. ';
@@ -446,7 +439,7 @@ var checkHashTagsValidity = function () {
   hashTagInput.setCustomValidity(customValidityConstructor);
 };
 
-hashTagInput.addEventListener('change', function () {
+hashTagInput.addEventListener('input', function () {
   checkHashTagsValidity();
 });
 
@@ -457,7 +450,7 @@ var checkDescriptionValidity = function () {
   }
 };
 
-descriptionInput.addEventListener('change', function () {
+descriptionInput.addEventListener('input', function () {
   checkDescriptionValidity();
 });
 
