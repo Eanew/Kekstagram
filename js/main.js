@@ -23,6 +23,9 @@ var AVATARS = [];
 var AVATAR_URL_TEMPLATE = 'img/avatar-{{случайное число от 1 до 6}}.svg';
 var COMMENTS_COUNT = 6;
 
+// openUploadOverlay();
+// addModalOpen();
+
 for (var i = 0; i < COMMENTS_COUNT; i++) {
   AVATARS[i] = AVATAR_URL_TEMPLATE.replace('{{случайное число от 1 до 6}}', (i + 1));
   NAMES[i] = 'User ' + (i + 1);
@@ -64,12 +67,12 @@ var makePhotos = function () {
   for (i = 0; i < photosCount; i++) {
     photos[i] = {
       url: PHOTO_URL_TEMPLATE.replace('{{i}}', (i + 1)),
-      description: 'Описание фотографии', // Не реализовано
+      description: 'Описание фотографии',
       likes: getRandomCount(15, 200),
       comments: comments.slice(0, commentsAmount)
     };
-    comments = makeComments(); // Обновляет случайные комментарии
-    commentsAmount = getRandomCount(2, COMMENTS_COUNT); // Обновляет случайное количество случайных комментариев
+    comments = makeComments();
+    commentsAmount = getRandomCount(2, COMMENTS_COUNT);
   }
 
   return photos;
@@ -128,8 +131,6 @@ var addModalOpen = function () {
 var removeModalOpen = function () {
   document.querySelector('body').classList.remove('modal-open');
 };
-
-// addModalOpen();
 
 var uploadForm = document.querySelector('.img-upload__form');
 var uploadInput = uploadForm.querySelector('#upload-file');
@@ -195,9 +196,6 @@ overlayCloseButton.addEventListener('click', function (evt) {
   evt.preventDefault();
   closeUploadOverlay();
 });
-
-// openUploadOverlay();
-// временно для работы
 
 var uploadPreview = uploadOverlay.querySelector('.img-upload__preview');
 var uploadPreviewImg = uploadPreview.querySelector('img');
