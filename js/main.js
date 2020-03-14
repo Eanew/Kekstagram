@@ -2,6 +2,8 @@
 
 var SPACE = ' ';
 var ESC_KEY = 'Escape';
+var ARROW_LEFT_KEY = 'ArrowLeft';
+var ARROW_RIGHT_KEY = 'ArrowRight';
 var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
 var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
 var PHOTO_URL_TEMPLATE = 'photos/{{i}}.jpg';
@@ -230,6 +232,9 @@ var setEffectLevelValue = function () {
   }
 };
 
+effectPin.setAttribute('tabindex', '');
+effectLine.setAttribute('tabindex', '0');
+
 effectLine.addEventListener('mousedown', function (evt) {
   // evt.preventDefault();
   var startCoordX = evt.clientX;
@@ -259,6 +264,27 @@ effectLine.addEventListener('mousedown', function (evt) {
   };
   document.addEventListener('mousemove', effectPinMoveHandler);
   document.addEventListener('mouseup', effectPinMouseupHandler);
+});
+
+effectLine.addEventListener('keydown', function (evt) {
+  var pinDirection = 0;
+  if (evt.key === ARROW_LEFT_KEY) {
+    pinDirection = -1;
+  }
+  if (evt.key === ARROW_RIGHT_KEY) {
+    pinDirection = 1;
+  }
+  var pinStep = effectLineWidth / 50;
+  var shiftX = pinDirection * pinStep;
+  var totalX = +effectPin.style.left.replace('px', '') + shiftX;
+  if (totalX < 0) {
+    totalX = 0;
+  }
+  if (totalX > effectLineWidth) {
+    totalX = effectLineWidth;
+  }
+  effectPin.style.left = totalX + 'px';
+  setEffectLevelValue();
 });
 
 effectLevel.classList.add('hidden');
