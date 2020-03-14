@@ -1,6 +1,7 @@
 'use strict';
 
 var SPACE = ' ';
+var ENTER_KEY = 'Enter';
 var ESC_KEY = 'Escape';
 var ARROW_LEFT_KEY = 'ArrowLeft';
 var ARROW_RIGHT_KEY = 'ArrowRight';
@@ -108,30 +109,62 @@ pictures.appendChild(makePictures());
 var bigPicture = document.querySelector('.big-picture');
 var commentsList = bigPicture.querySelector('.social__comments');
 var comments = commentsList.querySelectorAll('.social__comment');
+var pictureIndex;
 
-var picturesClickHandler = function (evt) {
+var openBigPicture = function () {
+  bigPicture.querySelector('.big-picture__img').querySelector('img').src = photos[pictureIndex].url;
+  bigPicture.querySelector('.likes-count').textContent = photos[pictureIndex].likes;
+  bigPicture.querySelector('.comments-count').textContent = photos[pictureIndex].comments.length;
+  bigPicture.querySelector('.social__caption').textContent = photos[pictureIndex].description;
+
+  for (i = 0; i < comments.length; i++) {
+    comments[i].querySelector('.social__picture').src = photos[pictureIndex].comments[i].avatar;
+    comments[i].querySelector('.social__picture').alt = photos[pictureIndex].comments[i].name;
+    comments[i].querySelector('.social__text').textContent = photos[pictureIndex].comments[i].message;
+  }
+
+  bigPicture.classList.remove('hidden');
+  bigPictureCancelButton.focus();
+  addModalOpen();
+  document.addEventListener('keydown', bigPictureEscPressHandler);
+};
+
+pictures.addEventListener('click', function (evt) {
   if (evt.target && evt.target.classList.contains('picture__img')) {
     evt.preventDefault();
+    pictureIndex = evt.target.getAttribute('src').replace(NUMBERS_DISMATCH, '') - 1;
+    openBigPicture();
+  }
+});
 
-    var pictureIndex = evt.target.getAttribute('src').replace(NUMBERS_DISMATCH, '') - 1;
-
-    bigPicture.querySelector('.big-picture__img').querySelector('img').src = photos[pictureIndex].url;
-    bigPicture.querySelector('.likes-count').textContent = photos[pictureIndex].likes;
-    bigPicture.querySelector('.comments-count').textContent = photos[pictureIndex].comments.length;
-    bigPicture.querySelector('.social__caption').textContent = photos[pictureIndex].description;
-
-    for (i = 0; i < comments.length; i++) {
-      comments[i].querySelector('.social__picture').src = photos[pictureIndex].comments[i].avatar;
-      comments[i].querySelector('.social__picture').alt = photos[pictureIndex].comments[i].name;
-      comments[i].querySelector('.social__text').textContent = photos[pictureIndex].comments[i].message;
+pictures.addEventListener('keydown', function (evt) {
+  if (evt.target && evt.target.classList.contains('picture')) {
+    if (evt.key === SPACE || evt.key === ENTER_KEY) {
+      evt.preventDefault();
+      pictureIndex = evt.target.querySelector('img').getAttribute('src').replace(NUMBERS_DISMATCH, '') - 1;
+      openBigPicture();
     }
+  }
+});
 
-    bigPicture.classList.remove('hidden');
-    addModalOpen();
+var bigPictureCancelButton = bigPicture.querySelector('.big-picture__cancel');
+
+bigPictureCancelButton.addEventListener('click', function (evt) {
+  evt.preventDefault();
+  closeBigPicture();
+});
+
+var bigPictureEscPressHandler = function (evt) {
+  if (evt.key === ESC_KEY) {
+    closeBigPicture();
   }
 };
 
-pictures.addEventListener('click', picturesClickHandler);
+var closeBigPicture = function () {
+  document.removeEventListener('keydown', bigPictureEscPressHandler);
+  bigPicture.classList.add('hidden');
+  removeModalOpen();
+};
 
 bigPicture.querySelector('.social__comment-count').classList.add('hidden');
 bigPicture.querySelector('.comments-loader').classList.add('hidden');
