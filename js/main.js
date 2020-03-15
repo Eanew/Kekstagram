@@ -8,7 +8,7 @@ var ARROW_LEFT_KEY = 'ArrowLeft';
 var ARROW_RIGHT_KEY = 'ArrowRight';
 var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
 var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
-var EMPTY_SPACE = /\s+/g;
+var EMPTY_SPACE_MATCH = /\s+/g;
 
 var addModalOpen = function () {
   document.querySelector('body').classList.add('modal-open');
@@ -267,6 +267,7 @@ var effectLevelInput = effectLevel.querySelector('.effect-level__value');
 var effectLine = effectLevel.querySelector('.effect-level__line');
 var effectDepth = effectLine.querySelector('.effect-level__depth');
 var effectPin = effectLine.querySelector('.effect-level__pin');
+var currentFilter = {};
 
 // effectlevel.js
 
@@ -367,7 +368,6 @@ effectLevel.addEventListener('keydown', function (evt) {
 
 var EFFECT_ID_TEMPLATE = 'effect-';
 var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
-var currentFilter = {};
 
 var refreshCurrentFilter = function () {
   uploadPreviewImg.style.filter = '';
@@ -447,7 +447,7 @@ var checkHashTagsValidity = function () {
   var isSimilarityFinded;
   var customValidityConstructor = '';
   hashTagInput.setCustomValidity(customValidityConstructor);
-  hashTagInput.value = hashTagInput.value.replace(EMPTY_SPACE, SPACE);
+  hashTagInput.value = hashTagInput.value.replace(EMPTY_SPACE_MATCH, SPACE);
   hashTags = hashTagInput.value.split(SPACE);
   if (hashTags.length > hashTagsMaxCount) {
     customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами. ';
