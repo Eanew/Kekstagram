@@ -1,5 +1,7 @@
 'use strict';
 
+// util.js
+
 var SPACE = ' ';
 var ESC_KEY = 'Escape';
 var ARROW_LEFT_KEY = 'ArrowLeft';
@@ -7,10 +9,19 @@ var ARROW_RIGHT_KEY = 'ArrowRight';
 var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
 var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
 var EMPTY_SPACE = /\s+/g;
-var PHOTO_URL_TEMPLATE = 'photos/{{i}}.jpg';
-var EFFECT_ID_TEMPLATE = 'effect-';
-var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
-var DEFAULT_FILTER_CLASS = 'effects__preview--none';
+
+var addModalOpen = function () {
+  document.querySelector('body').classList.add('modal-open');
+};
+
+var removeModalOpen = function () {
+  document.querySelector('body').classList.remove('modal-open');
+};
+
+// /util.js
+
+// data.js
+
 var MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -21,6 +32,7 @@ var MESSAGES = [
 ];
 var NAMES = [];
 var AVATARS = [];
+var PHOTO_URL_TEMPLATE = 'photos/{{i}}.jpg';
 var AVATAR_URL_TEMPLATE = 'img/avatar-{{случайное число от 1 до 6}}.svg';
 var COMMENTS_COUNT = 6;
 
@@ -78,6 +90,12 @@ var makePhotos = function () {
 
 var photos = makePhotos();
 
+// /data.js
+
+// gallery.js
+
+// picture.js
+
 var pictures = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
@@ -101,14 +119,13 @@ var makePictures = function () {
 
 pictures.appendChild(makePictures());
 
-// Начало блока с большим изображением
+// /picture.js
+
+// preview.js
 
 var previewPictures = pictures.querySelectorAll('.picture');
 var bigPicture = document.querySelector('.big-picture');
 var bigPictureCancelButton = bigPicture.querySelector('.big-picture__cancel');
-var bigPictureLikes = bigPicture.querySelector('.likes-count');
-var bigPictureCommentInput = bigPicture.querySelector('.social__footer-text');
-var bigPictureSubmitButton = bigPicture.querySelector('.social__footer-btn');
 var commentsList = bigPicture.querySelector('.social__comments');
 var comments = commentsList.querySelectorAll('.social__comment');
 var selectedPicture;
@@ -118,18 +135,13 @@ var constructBigPicture = function () {
   bigPicture.querySelector('.big-picture__img').querySelector('img').src = photos[pictureIndex].url;
   bigPicture.querySelector('.social__caption').textContent = photos[pictureIndex].description;
   bigPicture.querySelector('.comments-count').textContent = photos[pictureIndex].comments.length;
-  bigPictureLikes.textContent = photos[pictureIndex].likes;
+  bigPicture.querySelector('.likes-count').textContent = photos[pictureIndex].likes;
 
   for (i = 0; i < comments.length; i++) {
     comments[i].querySelector('.social__picture').src = photos[pictureIndex].comments[i].avatar;
     comments[i].querySelector('.social__picture').alt = photos[pictureIndex].comments[i].name;
     comments[i].querySelector('.social__text').textContent = photos[pictureIndex].comments[i].message;
   }
-
-  bigPictureCancelButton.setAttribute('tabindex', '1');
-  bigPictureLikes.setAttribute('tabindex', '2');
-  bigPictureCommentInput.setAttribute('tabindex', '3');
-  bigPictureSubmitButton.setAttribute('tabindex', '4');
 };
 
 var previewPictureClickHandler = function (evt) {
@@ -144,9 +156,9 @@ var previewPictureClickHandler = function (evt) {
   document.addEventListener('keydown', bigPictureEscPressHandler);
 };
 
-for (i = 0; i < previewPictures.length; i++) {
-  previewPictures[i].addEventListener('click', previewPictureClickHandler);
-}
+previewPictures.forEach(function (previewPicture) {
+  previewPicture.addEventListener('click', previewPictureClickHandler);
+});
 
 bigPictureCancelButton.addEventListener('click', function (evt) {
   evt.preventDefault();
@@ -169,13 +181,15 @@ var closeBigPicture = function () {
 bigPicture.querySelector('.social__comment-count').classList.add('hidden');
 bigPicture.querySelector('.comments-loader').classList.add('hidden');
 
-var addModalOpen = function () {
-  document.querySelector('body').classList.add('modal-open');
-};
+// /preview.js
 
-var removeModalOpen = function () {
-  document.querySelector('body').classList.remove('modal-open');
-};
+// /gallery.js
+
+// form.js
+
+// openform.js
+
+var DEFAULT_FILTER_CLASS = 'effects__preview--none';
 
 var uploadForm = document.querySelector('.img-upload__form');
 var uploadInput = uploadForm.querySelector('#upload-file');
@@ -242,6 +256,10 @@ overlayCloseButton.addEventListener('click', function (evt) {
   closeUploadOverlay();
 });
 
+// /openform.js
+
+// filters.js
+
 var uploadPreview = uploadOverlay.querySelector('.img-upload__preview');
 var uploadPreviewImg = uploadPreview.querySelector('img');
 var effectLevel = uploadOverlay.querySelector('.effect-level');
@@ -249,6 +267,8 @@ var effectLevelInput = effectLevel.querySelector('.effect-level__value');
 var effectLine = effectLevel.querySelector('.effect-level__line');
 var effectDepth = effectLine.querySelector('.effect-level__depth');
 var effectPin = effectLine.querySelector('.effect-level__pin');
+
+// effectlevel.js
 
 var effectLineWidth;
 var effectPinX;
@@ -341,6 +361,12 @@ effectLevel.addEventListener('keydown', function (evt) {
   }
 });
 
+// /effectlevel.js
+
+// filterslist.js
+
+var EFFECT_ID_TEMPLATE = 'effect-';
+var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
 var currentFilter = {};
 
 var refreshCurrentFilter = function () {
@@ -370,6 +396,12 @@ var effectsListChangeHandler = function (evt) {
 
 effectsList.addEventListener('change', effectsListChangeHandler);
 
+// /filterslist.js
+
+// /filters.js
+
+// scale.js
+
 var imgScale = uploadOverlay.querySelector('.scale');
 var buttonSmaller = imgScale.querySelector('.scale__control--smaller');
 var buttonBigger = imgScale.querySelector('.scale__control--bigger');
@@ -396,6 +428,10 @@ buttonBigger.addEventListener('click', function () {
     switchImgSize();
   }
 });
+
+// /scale.js
+
+// textinputs.js
 
 var uploadText = uploadOverlay.querySelector('.img-upload__text');
 var hashTagInput = uploadText.querySelector('.text__hashtags');
@@ -459,3 +495,7 @@ uploadText.addEventListener('keydown', function (evt) {
     evt.stopPropagation();
   }
 });
+
+// /textinputs.js
+
+// /form.js
