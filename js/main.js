@@ -101,6 +101,8 @@ var makePictures = function () {
 
 pictures.appendChild(makePictures());
 
+// Начало блока с большим изображением
+
 var previewPictures = pictures.querySelectorAll('.picture');
 var bigPicture = document.querySelector('.big-picture');
 var bigPictureCancelButton = bigPicture.querySelector('.big-picture__cancel');
