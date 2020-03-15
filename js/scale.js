@@ -1,40 +1,37 @@
 'use strict';
 
 (function () {
-  var uploadOverlay = window.openForm.uploadOverlay;
-  var uploadPreviewImg = window.filters.uploadPreviewImg;
-
+  var uploadOverlay = document.querySelector('.img-upload__overlay');
+  var uploadPreviewImg = uploadOverlay.querySelector('.img-upload__preview').querySelector('img');
   var imgScale = uploadOverlay.querySelector('.scale');
+  var ImgScaleInput = imgScale.querySelector('.scale__control--value');
   var buttonSmaller = imgScale.querySelector('.scale__control--smaller');
   var buttonBigger = imgScale.querySelector('.scale__control--bigger');
-  var ImgScaleInput = imgScale.querySelector('.scale__control--value');
   var minScaleValue = 25;
   var maxScaleValue = 100;
-  var currentScaleValue = maxScaleValue;
 
   var switchImgSize = function () {
-    ImgScaleInput.value = currentScaleValue + '%';
-    uploadPreviewImg.style.transform = 'scale(' + currentScaleValue / 100 + ')';
+    ImgScaleInput.value = window.scale.currentValue + '%';
+    uploadPreviewImg.style.transform = 'scale(' + window.scale.currentValue / 100 + ')';
   };
 
   buttonSmaller.addEventListener('click', function () {
-    if (currentScaleValue > minScaleValue) {
-      currentScaleValue -= 25;
+    if (window.scale.currentValue > minScaleValue) {
+      window.scale.currentValue -= 25;
       switchImgSize();
     }
   });
 
   buttonBigger.addEventListener('click', function () {
-    if (currentScaleValue < maxScaleValue) {
-      currentScaleValue += 25;
+    if (window.scale.currentValue < maxScaleValue) {
+      window.scale.currentValue += 25;
       switchImgSize();
     }
   });
 
   window.scale = {
-    buttonSmaller: buttonSmaller,
-    currentScaleValue: currentScaleValue,
-    maxScaleValue: maxScaleValue,
+    currentValue: maxScaleValue,
+    maxValue: maxScaleValue,
     switchImgSize: function () {
       switchImgSize();
     }

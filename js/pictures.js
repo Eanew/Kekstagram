@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var pictures = window.preview.pictures;
+  var pictures = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
   var renderPicture = function (photo) {

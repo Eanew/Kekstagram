@@ -1,32 +1,26 @@
 'use strict';
 
 (function () {
-  var ARROW_LEFT_KEY = window.util.ARROW_LEFT_KEY;
-  var ARROW_RIGHT_KEY = window.util.ARROW_RIGHT_KEY;
-
-  var effectPin = window.filters.effectPin;
-  var currentFilter = window.filters.currentFilter;
-  var effectLevelInput = window.filters.effectLevelInput;
-  var uploadPreviewImg = window.filters.uploadPreviewImg;
-  var effectDepth = window.filters.effectDepth;
-  var effectLevel = window.filters.effectLevel;
-  var effectLine = window.filters.effectLine;
-
-  var effectLineWidth;
+  var uploadOverlay = document.querySelector('.img-upload__overlay');
+  var uploadPreviewImg = uploadOverlay.querySelector('.img-upload__preview').querySelector('img');
+  var effectLevel = uploadOverlay.querySelector('.effect-level');
+  var effectLevelInput = effectLevel.querySelector('.effect-level__value');
+  var effectLine = effectLevel.querySelector('.effect-level__line');
+  var effectDepth = effectLine.querySelector('.effect-level__depth');
+  var effectPin = effectLine.querySelector('.effect-level__pin');
   var effectPinX;
-
-  var getPinPositionInPercent = function () {
-    effectPinX = effectPin.style.left.replace('px', '');
-    return Math.round(effectPinX / effectLineWidth * 100);
-  };
-
   var fixedEffectValue;
   var totalValue;
 
+  var getPinPositionInPercent = function () {
+    effectPinX = effectPin.style.left.replace('px', '');
+    return Math.round(effectPinX / window.filters.effectLineWidth * 100);
+  };
+
   var setEffectSaturation = function () {
-    totalValue = currentFilter.calculableValue * effectLevelInput.value;
-    uploadPreviewImg.style.filter = currentFilter.attributeString.replace(currentFilter.defaultValue, totalValue);
-    uploadPreviewImg.style.WebkitFilter = currentFilter.attributeString.replace(currentFilter.defaultValue, totalValue);
+    totalValue = window.filters.current.calculableValue * effectLevelInput.value;
+    uploadPreviewImg.style.filter = window.filters.current.attributeString.replace(window.filters.current.defaultValue, totalValue);
+    uploadPreviewImg.style.WebkitFilter = window.filters.current.attributeString.replace(window.filters.current.defaultValue, totalValue);
     fixedEffectValue = effectLevelInput.value;
   };
 
@@ -41,12 +35,12 @@
   effectLevel.addEventListener('mousedown', function (evt) {
     var startCoordX;
     var effectLineStart = effectLine.getBoundingClientRect().left;
-    if ((evt.clientX - effectLineStart) >= 0 && evt.clientX <= (effectLineStart + effectLineWidth)) {
+    if ((evt.clientX - effectLineStart) >= 0 && evt.clientX <= (effectLineStart + window.filters.effectLineWidth)) {
       startCoordX = evt.clientX;
     } else if ((evt.clientX - effectLineStart) < 0) {
       startCoordX = effectLineStart;
     } else {
-      startCoordX = effectLineStart + effectLineWidth;
+      startCoordX = effectLineStart + window.filters.effectLineWidth;
     }
     var effectPinNewPosition = startCoordX - effectLineStart;
     effectPin.style.left = effectPinNewPosition + 'px';
@@ -56,12 +50,12 @@
       moveEvt.preventDefault();
       var shiftX = moveEvt.clientX - startCoordX;
       var totalX = +effectPin.style.left.replace('px', '') + shiftX;
-      if (totalX >= 0 && totalX <= effectLineWidth) {
+      if (totalX >= 0 && totalX <= window.filters.effectLineWidth) {
         startCoordX = moveEvt.clientX;
       } else if (totalX < 0) {
         totalX = 0;
       } else {
-        totalX = effectLineWidth;
+        totalX = window.filters.effectLineWidth;
       }
       effectPin.style.left = totalX + 'px';
       setEffectLevelValue();
@@ -80,31 +74,30 @@
     var pinDirection;
 
     var movePin = function () {
-      var pinStep = effectLineWidth / 50;
+      var pinStep = window.filters.effectLineWidth / 50;
       var shiftX = pinDirection * pinStep;
       var totalX = +effectPin.style.left.replace('px', '') + shiftX;
       if (totalX < 0) {
         totalX = 0;
       }
-      if (totalX > effectLineWidth) {
-        totalX = effectLineWidth;
+      if (totalX > window.filters.effectLineWidth) {
+        totalX = window.filters.effectLineWidth;
       }
       effectPin.style.left = totalX + 'px';
       setEffectLevelValue();
     };
 
-    if (evt.key === ARROW_LEFT_KEY) {
+    if (evt.key === window.util.ARROW_LEFT_KEY) {
       pinDirection = -1;
       movePin();
     }
-    if (evt.key === ARROW_RIGHT_KEY) {
+    if (evt.key === window.util.ARROW_RIGHT_KEY) {
       pinDirection = 1;
       movePin();
     }
   });
 
   window.effectLevel = {
-    effectLineWidth: effectLineWidth,
     setValue: function () {
       setEffectLevelValue();
     }

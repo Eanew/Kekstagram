@@ -1,32 +1,26 @@
 'use strict';
 
 (function () {
-  var DEFAULT_FILTER_CLASS = 'effects__preview--none';
-  var ESC_KEY = window.util.ESC_KEY;
+  var maxScaleValue = window.scale.maxValue;
 
-  var buttonSmaller = window.scale.buttonSmaller;
-  var currentScaleValue = window.scale.currentScaleValue;
-  var maxScaleValue = window.scale.maxScaleValue;
-  var uploadPreviewImg = window.filters.uploadPreviewImg;
-
-  var uploadForm = document.querySelector('.img-upload__form');
-  var uploadInput = uploadForm.querySelector('#upload-file');
-  var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
+  var uploadInput = document.querySelector('#upload-file');
+  var uploadOverlay = document.querySelector('.img-upload__overlay');
   var overlayCloseButton = uploadOverlay.querySelector('#upload-cancel');
-  var effectsList = uploadOverlay.querySelector('.effects__list');
-  var defaultFilter = effectsList.querySelector('#effect-none');
-  var imgFilterClass;
+  var uploadPreviewImg = uploadOverlay.querySelector('.img-upload__preview').querySelector('img');
+  var defaultFilter = uploadOverlay.querySelector('#effect-none');
+  var buttonSmaller = uploadOverlay.querySelector('.scale__control--smaller');
+  var uploadInputPreviousValue;
 
   var setDefaultFilter = function () {
     defaultFilter.checked = true;
-    uploadPreviewImg.classList.remove(imgFilterClass);
-    imgFilterClass = DEFAULT_FILTER_CLASS;
-    uploadPreviewImg.classList.add(imgFilterClass);
-    window.filterList.refreshCurrent();
+    uploadPreviewImg.classList.remove(window.filters.imgClass);
+    window.filters.imgClass = window.filters.DEFAULT_CLASS;
+    uploadPreviewImg.classList.add(window.filters.imgClass);
+    window.filters.refreshCurrent();
   };
 
   var setDefaultImgScale = function () {
-    currentScaleValue = maxScaleValue;
+    window.scale.currentValue = maxScaleValue;
     window.scale.switchImgSize();
   };
 
@@ -34,18 +28,16 @@
     if (!defaultFilter.checked) {
       setDefaultFilter();
     }
-    if (currentScaleValue !== maxScaleValue) {
+    if (window.scale.currentValue !== maxScaleValue) {
       setDefaultImgScale();
     }
   };
 
   var uploadOverlayEscPressHandler = function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (evt.key === window.util.ESC_KEY) {
       closeUploadOverlay();
     }
   };
-
-  var uploadInputPreviousValue;
 
   var openUploadOverlay = function () {
     uploadOverlay.classList.remove('hidden');
@@ -73,11 +65,4 @@
     evt.preventDefault();
     closeUploadOverlay();
   });
-
-  window.openForm = {
-    DEFAULT_FILTER_CLASS: DEFAULT_FILTER_CLASS,
-    imgFilterClass: imgFilterClass,
-    uploadOverlay: uploadOverlay,
-    effectsList: effectsList
-  };
 })();

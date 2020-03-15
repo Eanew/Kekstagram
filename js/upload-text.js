@@ -1,17 +1,14 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = window.util.ESC_KEY;
   var SPACE = window.util.SPACE;
   var EMPTY_SPACE_MATCH = window.util.EMPTY_SPACE_MATCH;
   var VALID_HASH_TAG_MATCH = window.util.VALID_HASH_TAG_MATCH;
 
-  var uploadOverlay = window.openForm.uploadOverlay;
-
+  var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadText = uploadOverlay.querySelector('.img-upload__text');
   var hashTagInput = uploadText.querySelector('.text__hashtags');
   var descriptionInput = uploadText.querySelector('.text__description');
-
   var descriptionCommentMaxLength = 140;
   var hashTagsMaxLength = 20;
   var hashTagsMaxCount = 5;
@@ -66,7 +63,7 @@
   });
 
   uploadText.addEventListener('keydown', function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (evt.key === window.util.ESC_KEY) {
       evt.stopPropagation();
     }
   });
