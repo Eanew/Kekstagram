@@ -24,9 +24,6 @@ var AVATARS = [];
 var AVATAR_URL_TEMPLATE = 'img/avatar-{{случайное число от 1 до 6}}.svg';
 var COMMENTS_COUNT = 6;
 
-// openUploadOverlay();
-// addModalOpen();
-
 for (var i = 0; i < COMMENTS_COUNT; i++) {
   AVATARS[i] = AVATAR_URL_TEMPLATE.replace('{{случайное число от 1 до 6}}', (i + 1));
   NAMES[i] = 'User ' + (i + 1);
@@ -277,9 +274,6 @@ var setEffectLevelValue = function () {
   }
 };
 
-effectPin.setAttribute('tabindex', '');
-effectLevel.setAttribute('tabindex', '0');
-
 effectLevel.addEventListener('mousedown', function (evt) {
   var startCoordX;
   var effectLineStart = effectLine.getBoundingClientRect().left;
@@ -345,8 +339,6 @@ effectLevel.addEventListener('keydown', function (evt) {
   }
 });
 
-effectLevel.classList.add('hidden');
-
 var currentFilter = {};
 
 var refreshCurrentFilter = function () {
@@ -388,7 +380,6 @@ var switchImgSize = function () {
   ImgScaleInput.value = currentScaleValue + '%';
   uploadPreviewImg.style.transform = 'scale(' + currentScaleValue / 100 + ')';
 };
-switchImgSize();
 
 buttonSmaller.addEventListener('click', function () {
   if (currentScaleValue > minScaleValue) {
@@ -466,5 +457,3 @@ uploadText.addEventListener('keydown', function (evt) {
     evt.stopPropagation();
   }
 });
-
-uploadForm.setAttribute('action', 'https://js.dump.academy/kekstagram');
