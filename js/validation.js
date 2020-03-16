@@ -1,8 +1,10 @@
 'use strict';
 
 (function () {
-  var SPACE = window.util.SPACE;
+  var START_WITH_SPACE_MATCH = /^\s(?=#)/;
+  var END_WITH_SPACE_MATCH = /\s(?!.)/; // Удалить последний пробел перед отправкой
   var EMPTY_SPACE_MATCH = window.util.EMPTY_SPACE_MATCH;
+  var SPACE = window.util.SPACE;
   var VALID_HASH_TAG_MATCH = window.util.VALID_HASH_TAG_MATCH;
 
   var uploadOverlay = document.querySelector('.img-upload__overlay');
@@ -19,9 +21,9 @@
     var isSimilarityFinded;
     var customValidityConstructor = '';
     hashTagInput.setCustomValidity(customValidityConstructor);
-    hashTagInput.value = hashTagInput.value.replace(EMPTY_SPACE_MATCH, SPACE);
+    hashTagInput.value = hashTagInput.value.replace(EMPTY_SPACE_MATCH, SPACE).replace(START_WITH_SPACE_MATCH, '');
     hashTags = hashTagInput.value.split(SPACE);
-    if (hashTags.length > hashTagsMaxCount) {
+    if ((hashTags.length > hashTagsMaxCount && hashTags[hashTags.length - 1] !== '') || (hashTags.length > hashTagsMaxCount + 1)) {
       customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами. ';
     }
     for (var i = 0; i < hashTags.length; i++) {
