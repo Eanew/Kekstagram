@@ -2,7 +2,7 @@
 
 (function () {
   var START_WITH_SPACE_MATCH = /^\s(?=#)/;
-  var END_WITH_SPACE_MATCH = /\s(?!.)/; // Удалить последний пробел перед отправкой
+  var END_WITH_SPACE_MATCH = /\s(?!.)/;
   var EMPTY_SPACE_MATCH = window.util.EMPTY_SPACE_MATCH;
   var SPACE = window.util.SPACE;
   var VALID_HASH_TAG_MATCH = window.util.VALID_HASH_TAG_MATCH;
@@ -51,6 +51,10 @@
 
   hashTagInput.addEventListener('input', function () {
     checkHashTagsValidity();
+  });
+
+  hashTagInput.addEventListener('change', function () {
+    hashTagInput.value = hashTagInput.value.replace(END_WITH_SPACE_MATCH, '');
   });
 
   var checkDescriptionValidity = function () {
