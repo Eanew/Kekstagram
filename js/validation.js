@@ -1,29 +1,33 @@
 'use strict';
 
 (function () {
-  var START_WITH_SPACE_MATCH = /^\s(?=#)/;
-  var END_WITH_SPACE_MATCH = /\s(?!.)/;
-  var EMPTY_SPACE_MATCH = window.util.EMPTY_SPACE_MATCH;
-  var SPACE = window.util.SPACE;
-  var VALID_HASH_TAG_MATCH = window.util.VALID_HASH_TAG_MATCH;
+  var EMPTY_SPACE_MATCH = /\s+/g;
+  var EMPTY_SPACE_IN_EDGES_MATCH = /^\s+|\s+(?!.)/g;
+  var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
+  var HASH_TAG_MAX_LENGTH = 20;
+  var COMMENT_MAX_LENGTH = 140;
 
-  var uploadOverlay = document.querySelector('.img-upload__overlay');
+  var uploadForm = document.querySelector('.img-upload__form');
+  var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
   var uploadText = uploadOverlay.querySelector('.img-upload__text');
   var hashTagInput = uploadText.querySelector('.text__hashtags');
   var descriptionInput = uploadText.querySelector('.text__description');
-  var descriptionCommentMaxLength = 140;
-  var hashTagsMaxLength = 20;
-  var hashTagsMaxCount = 5;
-  var hashTags;
-  var isHashTagValid;
 
   var checkHashTagsValidity = function () {
+    var hashTagsLimit = 5;
+    var isHashTagValid;
     var isSimilarityFinded;
+    var hashTags;
     var customValidityConstructor = '';
     hashTagInput.setCustomValidity(customValidityConstructor);
-    hashTagInput.value = hashTagInput.value.replace(EMPTY_SPACE_MATCH, SPACE).replace(START_WITH_SPACE_MATCH, '');
-    hashTags = hashTagInput.value.split(SPACE);
-    if ((hashTags.length > hashTagsMaxCount && hashTags[hashTags.length - 1] !== '') || (hashTags.length > hashTagsMaxCount + 1)) {
+    hashTags = hashTagInput.value.split(EMPTY_SPACE_MATCH);
+    if (hashTags[0] === '') {
+      hashTagsLimit++;
+    }
+    if (hashTags[hashTags.length - 1] === '') {
+      hashTagsLimit++;
+    }
+    if (hashTags.length > hashTagsLimit) {
       customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами. ';
     }
     for (var i = 0; i < hashTags.length; i++) {
@@ -31,13 +35,13 @@
       if (!isHashTagValid) {
         customValidityConstructor += 'Хэш-тег начинается с решётки (#) и состоит из цифр и букв, в т.ч. заглавных. ';
       }
-      if (hashTags[i].length > hashTagsMaxLength) {
+      if (hashTags[i].length > HASH_TAG_MAX_LENGTH) {
         customValidityConstructor += 'Максимальное количество символов в хэш-теге - 20. ';
       }
       if (!isSimilarityFinded) {
         (function () {
           for (var j = i + 1; j < hashTags.length; j++) {
-            if (hashTags[j] === hashTags[i]) {
+            if (hashTags[j] === hashTags[i] && hashTags[j] !== '') {
               isSimilarityFinded = true;
               customValidityConstructor += 'Один и тот же хэш-тег нельзя использовать дважды. ';
               return;
@@ -53,13 +57,9 @@
     checkHashTagsValidity();
   });
 
-  hashTagInput.addEventListener('change', function () {
-    hashTagInput.value = hashTagInput.value.replace(END_WITH_SPACE_MATCH, '');
-  });
-
   var checkDescriptionValidity = function () {
     descriptionInput.setCustomValidity('');
-    if (descriptionInput.value.length > descriptionCommentMaxLength) {
+    if (descriptionInput.value.length > COMMENT_MAX_LENGTH) {
       descriptionInput.setCustomValidity('Максимальная длина комментария - 140 символов.');
     }
   };
@@ -72,5 +72,11 @@
     if (evt.key === window.util.ESC_KEY) {
       evt.stopPropagation();
     }
+  });
+
+  uploadForm.addEventListener('submit', function () {
+    hashTagInput.value = hashTagInput.value
+    .replace(EMPTY_SPACE_IN_EDGES_MATCH, '')
+    .replace(EMPTY_SPACE_MATCH, window.util.SPACE);
   });
 })();
