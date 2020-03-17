@@ -12,13 +12,17 @@
   var effectLine = effectLevel.querySelector('.effect-level__line');
   var effectPin = effectLine.querySelector('.effect-level__pin');
 
+  var setCurrentFilter = function (filter) {
+    filter.attributeString = getComputedStyle(uploadPreviewImg).filter;
+    filter.defaultValue = filter.attributeString.replace(window.util.NUMBERS_DISMATCH, '');
+    filter.calculableValue = filter.defaultValue / 100;
+  };
+
   var refreshCurrentFilter = function (filter) {
     uploadPreviewImg.style.filter = '';
     uploadPreviewImg.style.WebkitFilter = '';
     if (window.filters.imgClass !== DEFAULT_FILTER_CLASS) {
-      filter.attributeString = getComputedStyle(uploadPreviewImg).filter;
-      filter.defaultValue = filter.attributeString.replace(window.util.NUMBERS_DISMATCH, '');
-      filter.calculableValue = filter.defaultValue / 100;
+      setCurrentFilter(filter);
       effectLevel.classList.remove('hidden');
       window.filters.effectLineWidth = +getComputedStyle(effectLine).width.replace('px', '');
       effectPin.style.left = window.filters.effectLineWidth + 'px';

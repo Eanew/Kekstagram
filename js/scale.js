@@ -4,14 +4,14 @@
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadPreviewImg = uploadOverlay.querySelector('.img-upload__preview').querySelector('img');
   var imgScale = uploadOverlay.querySelector('.scale');
-  var ImgScaleInput = imgScale.querySelector('.scale__control--value');
+  var imgScaleInput = imgScale.querySelector('.scale__control--value');
   var buttonSmaller = imgScale.querySelector('.scale__control--smaller');
   var buttonBigger = imgScale.querySelector('.scale__control--bigger');
   var minScaleValue = 25;
   var maxScaleValue = 100;
 
   var switchImgSize = function () {
-    ImgScaleInput.value = window.scale.currentValue + '%';
+    imgScaleInput.value = window.scale.currentValue + '%';
     uploadPreviewImg.style.transform = 'scale(' + window.scale.currentValue / 100 + ')';
   };
 
