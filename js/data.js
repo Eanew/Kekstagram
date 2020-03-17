@@ -14,6 +14,7 @@
   var PHOTO_URL_TEMPLATE = 'photos/{{i}}.jpg';
   var AVATAR_URL_TEMPLATE = 'img/avatar-{{случайное число от 1 до 6}}.svg';
   var COMMENTS_COUNT = 6;
+  var MIN_COMMENTS_COUNT = 2;
 
   for (var i = 0; i < COMMENTS_COUNT; i++) {
     AVATARS[i] = AVATAR_URL_TEMPLATE.replace('{{случайное число от 1 до 6}}', (i + 1));
@@ -61,7 +62,7 @@
         comments: comments.slice(0, commentsAmount)
       };
       comments = makeComments();
-      commentsAmount = getRandomCount(2, COMMENTS_COUNT);
+      commentsAmount = getRandomCount(MIN_COMMENTS_COUNT, COMMENTS_COUNT);
     }
 
     return photos;

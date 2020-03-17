@@ -11,15 +11,14 @@
   var effectLevel = uploadOverlay.querySelector('.effect-level');
   var effectLine = effectLevel.querySelector('.effect-level__line');
   var effectPin = effectLine.querySelector('.effect-level__pin');
-  // var effectLineWidth;
 
-  var refreshCurrentFilter = function () {
+  var refreshCurrentFilter = function (filter) {
     uploadPreviewImg.style.filter = '';
     uploadPreviewImg.style.WebkitFilter = '';
     if (window.filters.imgClass !== DEFAULT_FILTER_CLASS) {
-      window.filters.current.attributeString = getComputedStyle(uploadPreviewImg).filter;
-      window.filters.current.defaultValue = window.filters.current.attributeString.replace(window.util.NUMBERS_DISMATCH, '');
-      window.filters.current.calculableValue = window.filters.current.defaultValue / 100;
+      filter.attributeString = getComputedStyle(uploadPreviewImg).filter;
+      filter.defaultValue = filter.attributeString.replace(window.util.NUMBERS_DISMATCH, '');
+      filter.calculableValue = filter.defaultValue / 100;
       effectLevel.classList.remove('hidden');
       window.filters.effectLineWidth = +getComputedStyle(effectLine).width.replace('px', '');
       effectPin.style.left = window.filters.effectLineWidth + 'px';
@@ -34,7 +33,7 @@
       uploadPreviewImg.classList.remove(window.filters.imgClass);
       window.filters.imgClass = evt.target.id.replace(EFFECT_ID_TEMPLATE, PREVIEW_CLASS_TEMPLATE);
       uploadPreviewImg.classList.add(window.filters.imgClass);
-      refreshCurrentFilter();
+      refreshCurrentFilter(window.filters.current);
     }
   };
 
@@ -43,8 +42,8 @@
   window.filters = {
     DEFAULT_CLASS: DEFAULT_FILTER_CLASS,
     current: {},
-    refreshCurrent: function () {
-      refreshCurrentFilter();
+    refresh: function (filter) {
+      refreshCurrentFilter(filter);
     }
   };
 })();

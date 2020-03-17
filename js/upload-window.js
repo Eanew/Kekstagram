@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var maxScaleValue = window.scale.maxValue;
-
   var uploadInput = document.querySelector('#upload-file');
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var overlayCloseButton = uploadOverlay.querySelector('#upload-cancel');
@@ -11,25 +9,25 @@
   var buttonSmaller = uploadOverlay.querySelector('.scale__control--smaller');
   var uploadInputPreviousValue;
 
-  var setDefaultFilter = function () {
+  var setDefaultFilter = function (filter) {
     defaultFilter.checked = true;
-    uploadPreviewImg.classList.remove(window.filters.imgClass);
-    window.filters.imgClass = window.filters.DEFAULT_CLASS;
-    uploadPreviewImg.classList.add(window.filters.imgClass);
-    window.filters.refreshCurrent();
+    uploadPreviewImg.classList.remove(filter.imgClass);
+    filter.imgClass = filter.DEFAULT_CLASS;
+    uploadPreviewImg.classList.add(filter.imgClass);
+    filter.refresh(filter.current);
   };
 
-  var setDefaultImgScale = function () {
-    window.scale.currentValue = maxScaleValue;
-    window.scale.switchImgSize();
+  var setDefaultImgScale = function (scale) {
+    scale.currentValue = scale.maxValue;
+    scale.switchImgSize();
   };
 
   var setDefaultUploadSettings = function () {
     if (!defaultFilter.checked) {
-      setDefaultFilter();
+      setDefaultFilter(window.filters);
     }
-    if (window.scale.currentValue !== maxScaleValue) {
-      setDefaultImgScale();
+    if (window.scale.currentValue !== window.scale.maxValue) {
+      setDefaultImgScale(window.scale);
     }
   };
 
@@ -42,7 +40,7 @@
   var openUploadOverlay = function () {
     uploadOverlay.classList.remove('hidden');
     buttonSmaller.focus();
-    window.util.addModalOpen();
+    window.util.setModalOpenedMode();
     uploadInputPreviousValue = uploadInput.value;
     document.addEventListener('keydown', uploadOverlayEscPressHandler);
   };
@@ -50,7 +48,7 @@
   var closeUploadOverlay = function () {
     document.removeEventListener('keydown', uploadOverlayEscPressHandler);
     uploadOverlay.classList.add('hidden');
-    window.util.removeModalOpen();
+    window.util.setModalClosedMode();
     uploadInput.value = '';
   };
 

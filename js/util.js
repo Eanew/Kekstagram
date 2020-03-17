@@ -7,11 +7,11 @@
   var ARROW_RIGHT_KEY = 'ArrowRight';
   var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
 
-  var addModalOpen = function () {
+  var setModalOpenedMode = function () {
     document.querySelector('body').classList.add('modal-open');
   };
 
-  var removeModalOpen = function () {
+  var setModalClosedMode = function () {
     document.querySelector('body').classList.remove('modal-open');
   };
 
@@ -21,11 +21,11 @@
     ARROW_LEFT_KEY: ARROW_LEFT_KEY,
     ARROW_RIGHT_KEY: ARROW_RIGHT_KEY,
     NUMBERS_DISMATCH: NUMBERS_DISMATCH,
-    addModalOpen: function () {
-      addModalOpen();
+    setModalOpenedMode: function () {
+      setModalOpenedMode();
     },
-    removeModalOpen: function () {
-      removeModalOpen();
+    setModalClosedMode: function () {
+      setModalClosedMode();
     }
   };
 })();
