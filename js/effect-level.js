@@ -30,7 +30,7 @@
     effectLineWidth = window.filters.effectLineWidth;
     effectLevelInput.value = getPinPositionInPercent();
     if (effectLevelInput.value !== fixedEffectValue) {
-      setEffectSaturation(window.filters.current);
+      setEffectSaturation(window.filters.data);
     }
   };
 

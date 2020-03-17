@@ -17,11 +17,11 @@
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
     bigPicture.querySelector('.likes-count').textContent = photo.likes;
 
-    for (var i = 0; i < comments.length; i++) {
-      comments[i].querySelector('.social__picture').src = photo.comments[i].avatar;
-      comments[i].querySelector('.social__picture').alt = photo.comments[i].name;
-      comments[i].querySelector('.social__text').textContent = photo.comments[i].message;
-    }
+    comments.forEach(function (comment, i) {
+      comment.querySelector('.social__picture').src = photo.comments[i].avatar;
+      comment.querySelector('.social__picture').alt = photo.comments[i].name;
+      comment.querySelector('.social__text').textContent = photo.comments[i].message;
+    });
   };
 
   var previewPictureClickHandler = function (evt) {

@@ -14,7 +14,7 @@
     uploadPreviewImg.classList.remove(filter.imgClass);
     filter.imgClass = filter.DEFAULT_CLASS;
     uploadPreviewImg.classList.add(filter.imgClass);
-    filter.refresh(filter.current);
+    filter.refresh(filter);
   };
 
   var setDefaultImgScale = function (scale) {

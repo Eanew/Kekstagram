@@ -30,8 +30,8 @@
   });
 
   window.scale = {
-    currentValue: maxScaleValue,
     maxValue: maxScaleValue,
+    currentValue: maxScaleValue,
     switchImgSize: function () {
       switchImgSize();
     }

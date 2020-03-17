@@ -30,12 +30,12 @@
     if (hashTags.length > hashTagsLimit) {
       customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами. ';
     }
-    for (var i = 0; i < hashTags.length; i++) {
-      isHashTagValid = !hashTags[i].replace(VALID_HASH_TAG_MATCH, '');
+    hashTags.forEach(function (hashTag, i) {
+      isHashTagValid = !hashTag.replace(VALID_HASH_TAG_MATCH, '');
       if (!isHashTagValid) {
         customValidityConstructor += 'Хэш-тег начинается с решётки (#) и состоит из цифр и букв, в т.ч. заглавных. ';
       }
-      if (hashTags[i].length > HASH_TAG_MAX_LENGTH) {
+      if (hashTag.length > HASH_TAG_MAX_LENGTH) {
         customValidityConstructor += 'Максимальное количество символов в хэш-теге - 20. ';
       }
       if (!isSimilarityFinded) {
@@ -49,7 +49,7 @@
           }
         })();
       }
-    }
+    });
     hashTagInput.setCustomValidity(customValidityConstructor);
   };
 
