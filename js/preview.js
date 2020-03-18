@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var photos = window.data.photos;
-
   var pictures = document.querySelector('.pictures');
   var previewPictures = pictures.querySelectorAll('.picture');
   var bigPicture = document.querySelector('.big-picture');
@@ -34,7 +32,7 @@
       .getAttribute('src')
       .replace(window.util.NUMBERS_DISMATCH, '') - 1;
 
-    constructBigPicture(photos[pictureIndex]);
+    constructBigPicture(window.data.photos[pictureIndex]);
     bigPicture.classList.remove('hidden');
     bigPictureCancelButton.focus();
     window.util.setModalOpenedMode();

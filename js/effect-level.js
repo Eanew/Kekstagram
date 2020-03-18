@@ -27,7 +27,7 @@
 
   var setEffectLevelValue = function () {
     effectDepth.style.width = effectPin.style.left;
-    effectLineWidth = window.filters.effectLineWidth;
+    effectLineWidth = window.filters.data.effectLineWidth;
     effectLevelInput.value = getPinPositionInPercent();
     if (effectLevelInput.value !== fixedEffectValue) {
       setEffectSaturation(window.filters.data);

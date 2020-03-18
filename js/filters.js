@@ -25,8 +25,8 @@
     if (filter.imgClass !== DEFAULT_FILTER_CLASS) {
       setCurrentFilter();
       effectLevel.classList.remove('hidden');
-      filter.effectLineWidth = +getComputedStyle(effectLine).width.replace('px', '');
-      effectPin.style.left = filter.effectLineWidth + 'px';
+      currentFilter.effectLineWidth = +getComputedStyle(effectLine).width.replace('px', '');
+      effectPin.style.left = currentFilter.effectLineWidth + 'px';
       window.effectLevel.setValue();
     } else {
       effectLevel.classList.add('hidden');
