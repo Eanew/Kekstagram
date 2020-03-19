@@ -99,8 +99,6 @@
     }
   });
 
-  // Перемещение ползунка уже реализовано
-
   window.effectLevel = {
     setValue: function () {
       setEffectLevelValue();

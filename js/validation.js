@@ -39,15 +39,13 @@
         customValidityConstructor += 'Максимальное количество символов в хэш-теге - 20. ';
       }
       if (!isSimilarityFinded) {
-        (function () {
-          for (var j = i + 1; j < hashTags.length; j++) {
-            if (hashTags[j] === hashTags[i] && hashTags[j] !== '') {
-              isSimilarityFinded = true;
-              customValidityConstructor += 'Один и тот же хэш-тег нельзя использовать дважды. ';
-              return;
-            }
+        for (var j = i + 1; j < hashTags.length; j++) {
+          if (hashTags[j] === hashTags[i] && hashTags[j] !== '') {
+            isSimilarityFinded = true;
+            customValidityConstructor += 'Один и тот же хэш-тег нельзя использовать дважды. ';
+            break;
           }
-        })();
+        }
       }
     });
     hashTagInput.setCustomValidity(customValidityConstructor);

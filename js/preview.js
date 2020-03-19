@@ -27,12 +27,11 @@
     evt.stopPropagation();
     selectedPicture = evt.currentTarget;
 
-    var pictureIndex = selectedPicture
-      .querySelector('.picture__img')
-      .getAttribute('src')
-      .replace(window.util.NUMBERS_DISMATCH, '') - 1;
+    var picture = window.data.photos.filter(function (photo) {
+      return photo.url === selectedPicture.querySelector('.picture__img').getAttribute('src');
+    })[0];
+    constructBigPicture(picture);
 
-    constructBigPicture(window.data.photos[pictureIndex]);
     bigPicture.classList.remove('hidden');
     bigPictureCancelButton.focus();
     window.util.setModalOpenedMode();
