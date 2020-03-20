@@ -14,7 +14,7 @@
   };
 
   var errorHandler = function (error) {
-    console.log(error);
+    // console.log(error);
   };
 
   xhr.addEventListener('load', function () {
