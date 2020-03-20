@@ -13,14 +13,18 @@
     return picture;
   };
 
-  var makePictures = function () {
+  var makePictures = function (photos) {
     var fragment = document.createDocumentFragment();
-    window.data.photos.forEach(function (photo) {
+    photos.forEach(function (photo) {
       fragment.appendChild(renderPicture(photo));
     });
 
-    return fragment;
+    pictures.appendChild(fragment);
   };
 
-  pictures.appendChild(makePictures());
+  window.pictures = {
+    addToPage: function (photos) {
+      makePictures(photos);
+    }
+  };
 })();

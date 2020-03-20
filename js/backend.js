@@ -7,12 +7,17 @@
   xhr.responseType = 'json';
   xhr.timeout = 10000;
 
+  var successHandler = function (response) {
+    window.pictures.addToPage(response);
+    window.preview.photos.data = response;
+    window.preview.addClickHandler();
+  };
+
   xhr.addEventListener('load', function () {
     var error;
     switch (xhr.status) {
       case 200:
-        // successHandler(xhr.response);
-        // console.log(xhr.response);
+        successHandler(xhr.response);
         break;
 
       case 400:
