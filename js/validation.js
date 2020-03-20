@@ -69,12 +69,16 @@
   uploadText.addEventListener('keydown', function (evt) {
     if (evt.key === window.util.ESC_KEY) {
       evt.stopPropagation();
+      evt.target.blur();
     }
   });
 
-  uploadForm.addEventListener('submit', function () {
+  uploadForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
     hashTagInput.value = hashTagInput.value
     .replace(EMPTY_SPACE_IN_EDGES_MATCH, '')
     .replace(EMPTY_SPACE_MATCH, window.util.SPACE);
+    window.uploadOverlay.close();
+    window.uploadOverlay.setDefault();
   });
 })();

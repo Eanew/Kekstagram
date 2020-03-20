@@ -13,6 +13,10 @@
     window.preview.addClickHandler();
   };
 
+  var errorHandler = function (error) {
+    console.log(error);
+  };
+
   xhr.addEventListener('load', function () {
     var error;
     switch (xhr.status) {
@@ -37,18 +41,18 @@
     }
 
     if (error) {
-      // errorHandler(error);
+      errorHandler(error);
     }
   });
 
-  // xhr.addEventListener('error', function () {
-  //   errorHandler('Ошибка соединения');
-  // });
+  xhr.addEventListener('error', function () {
+    errorHandler('Ошибка соединения');
+  });
 
-  // xhr.addEventListener('timeout', function () {
-  //   var timeoutInSeconds = Math.floor(xhr.timeout / 1000);
-  //   errorHandler('Запрос выполняется слишком долго (дольше ' + timeoutInSeconds + ' секунд)');
-  // });
+  xhr.addEventListener('timeout', function () {
+    var timeoutInSeconds = Math.floor(xhr.timeout / 1000);
+    errorHandler('Запрос выполняется слишком долго (дольше ' + timeoutInSeconds + ' секунд)');
+  });
 
   xhr.open('GET', URL);
   xhr.send();
