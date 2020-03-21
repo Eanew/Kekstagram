@@ -5,15 +5,11 @@
   var URL = 'https://js.dump.academy/kekstagram';
 
   var uploadForm = document.querySelector('.img-upload__form');
-  var uploadInput = uploadForm.querySelector('#upload-file');
   var hashTagInput = uploadForm.querySelector('.text__hashtags');
   var uploadButton = uploadForm.querySelector('#upload-submit');
 
-  var successHandler = function (response) {
-    console.log(response);
+  var successHandler = function () {
     window.uploadOverlay.close();
-    window.uploadOverlay.setDefault();
-    uploadInput.value = '';
     uploadButton.textContent = 'Опубликовать';
     uploadButton.disabled = false;
   };
@@ -33,7 +29,7 @@
       var error;
       switch (xhr.status) {
         case 200:
-          successHandler(xhr.response);
+          successHandler();
           break;
         case 400:
           error = 'Неверный запрос';
