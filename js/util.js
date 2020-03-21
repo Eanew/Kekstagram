@@ -6,6 +6,7 @@
   var ARROW_LEFT_KEY = 'ArrowLeft';
   var ARROW_RIGHT_KEY = 'ArrowRight';
   var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
+  var EMPTY_SPACE_MATCH = /\s+/g;
 
   var setModalOpenedMode = function () {
     document.querySelector('body').classList.add('modal-open');
@@ -21,6 +22,7 @@
     ARROW_LEFT_KEY: ARROW_LEFT_KEY,
     ARROW_RIGHT_KEY: ARROW_RIGHT_KEY,
     NUMBERS_DISMATCH: NUMBERS_DISMATCH,
+    EMPTY_SPACE_MATCH: EMPTY_SPACE_MATCH,
     setModalOpenedMode: function () {
       setModalOpenedMode();
     },

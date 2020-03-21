@@ -5,7 +5,7 @@
   var xhr = new XMLHttpRequest();
 
   xhr.responseType = 'json';
-  xhr.timeout = 10000;
+  xhr.timeout = 20000;
 
   var successHandler = function (response) {
     window.pictures.addToPage(response);
@@ -14,7 +14,7 @@
   };
 
   var errorHandler = function (error) {
-    // console.log(error);
+    console.log(error);
   };
 
   xhr.addEventListener('load', function () {

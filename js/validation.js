@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var EMPTY_SPACE_MATCH = /\s+/g;
-  var EMPTY_SPACE_IN_EDGES_MATCH = /^\s+|\s+(?!.)/g;
   var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
   var HASH_TAG_MAX_LENGTH = 20;
   var COMMENT_MAX_LENGTH = 140;
@@ -20,7 +18,7 @@
     var hashTags;
     var customValidityConstructor = '';
     hashTagInput.setCustomValidity(customValidityConstructor);
-    hashTags = hashTagInput.value.split(EMPTY_SPACE_MATCH);
+    hashTags = hashTagInput.value.split(window.util.EMPTY_SPACE_MATCH);
     if (hashTags[0] === '') {
       hashTagsLimit++;
     }
@@ -71,14 +69,5 @@
       evt.stopPropagation();
       evt.target.blur();
     }
-  });
-
-  uploadForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
-    hashTagInput.value = hashTagInput.value
-    .replace(EMPTY_SPACE_IN_EDGES_MATCH, '')
-    .replace(EMPTY_SPACE_MATCH, window.util.SPACE);
-    window.uploadOverlay.close();
-    window.uploadOverlay.setDefault();
   });
 })();
