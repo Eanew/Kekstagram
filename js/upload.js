@@ -7,15 +7,44 @@
   var uploadForm = document.querySelector('.img-upload__form');
   var hashTagInput = uploadForm.querySelector('.text__hashtags');
   var uploadButton = uploadForm.querySelector('#upload-submit');
+  var pageMain = document.querySelector('main');
+  var successMessage = document.querySelector('#success').content.querySelector('.success');
+  var errorMessage = document.querySelector('#error').content.querySelector('.error');
 
-  var successHandler = function () {
-    window.uploadOverlay.close();
-    uploadButton.textContent = 'Опубликовать';
-    uploadButton.disabled = false;
+  var showResultMessage = function (template) {
+    var overlay = template.cloneNode(true);
+    var message = overlay.querySelector('div');
+    var button = overlay.querySelector('button');
+
+    var overlayEscPressHandler = function (evt) {
+      if (evt.key === window.util.ESC_KEY) {
+        document.removeEventListener('keydown', overlayEscPressHandler);
+        overlay.remove();
+      }
+    };
+    document.addEventListener('keydown', overlayEscPressHandler);
+
+    message.addEventListener('click', function (evt) {
+      evt.stopPropagation();
+    });
+
+    overlay.addEventListener('click', function () {
+      document.removeEventListener('keydown', overlayEscPressHandler);
+      overlay.remove();
+    });
+
+    button.addEventListener('click', function () {
+      document.removeEventListener('keydown', overlayEscPressHandler);
+      overlay.remove();
+    });
+
+    pageMain.insertAdjacentElement('afterbegin', overlay);
+    button.focus();
   };
 
-  var errorHandler = function (error) {
-    console.log(error);
+  var getSubmitResult = function (messageTemplate) {
+    showResultMessage(messageTemplate);
+    window.uploadOverlay.close();
     uploadButton.textContent = 'Опубликовать';
     uploadButton.disabled = false;
   };
@@ -26,35 +55,19 @@
     xhr.timeout = 5000;
 
     xhr.addEventListener('load', function () {
-      var error;
-      switch (xhr.status) {
-        case 200:
-          successHandler();
-          break;
-        case 400:
-          error = 'Неверный запрос';
-          break;
-        case 401:
-          error = 'Пользователь не авторизован';
-          break;
-        case 404:
-          error = 'Ничего не найдено';
-          break;
-        default:
-          error = 'Статус ответа: ' + xhr.status + window.util.SPACE + xhr.statusText;
-      }
-      if (error) {
-        errorHandler(error);
+      if (xhr.status === 200) {
+        getSubmitResult(successMessage);
+      } else {
+        getSubmitResult(errorMessage);
       }
     });
 
     xhr.addEventListener('error', function () {
-      errorHandler('Ошибка соединения');
+      getSubmitResult(errorMessage);
     });
 
     xhr.addEventListener('timeout', function () {
-      var timeoutInSeconds = Math.floor(xhr.timeout / 1000);
-      errorHandler('Запрос выполняется слишком долго (дольше ' + timeoutInSeconds + ' секунд)');
+      getSubmitResult(errorMessage);
     });
 
     xhr.open('POST', URL);
