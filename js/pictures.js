@@ -23,8 +23,6 @@
   };
 
   window.pictures = {
-    addToPage: function (photos) {
-      makePictures(photos);
-    }
+    addToPage: makePictures
   };
 })();

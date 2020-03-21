@@ -58,8 +58,6 @@
   });
 
   window.uploadOverlay = {
-    close: function () {
-      closeUploadOverlay();
-    }
+    close: closeUploadOverlay
   };
 })();

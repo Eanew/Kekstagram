@@ -28,15 +28,10 @@
     uploadingMessage.focus();
   };
 
-  var showResultMessage = function (template, errorDescription) {
+  var showResultMessage = function (template) {
     var overlay = template.cloneNode(true);
     var inner = overlay.querySelector('div');
     var button = overlay.querySelector('button');
-    var message = overlay.querySelector('h2');
-
-    if (errorDescription) {
-      message.innerHTML += errorDescription;
-    }
 
     var closeResultMessage = function () {
       document.removeEventListener('keydown', overlayEscPressHandler);
@@ -72,42 +67,23 @@
   };
 
   var sendFormData = function (data) {
-    var error;
     var xhr = new XMLHttpRequest();
     xhr.timeout = 10000;
 
     xhr.addEventListener('load', function () {
-      switch (xhr.status) {
-        case 200:
-          error = '';
-          showResultMessage(successMessage);
-          break;
-        case 400:
-          error = ':<br><br><small>Неверный запрос</small>';
-          break;
-        case 401:
-          error = ':<br><br><small>Пользователь не авторизован</small>';
-          break;
-        case 404:
-          error = ':<br><br><small>По вашему запросу ничего не найдено</small>';
-          break;
-        default:
-          error = '.<br><br><small>Статус ответа: ' + xhr.status + window.util.SPACE + xhr.statusText + '</small>';
-      }
-      if (error) {
-        showResultMessage(errorMessage, error);
+      if (xhr.status === 200) {
+        showResultMessage(successMessage);
+      } else {
+        showResultMessage(errorMessage);
       }
     });
 
     xhr.addEventListener('error', function () {
-      error = ':<br><br><small>Нет подключения к интернету</small>';
-      showResultMessage(errorMessage, error);
+      showResultMessage(errorMessage);
     });
 
     xhr.addEventListener('timeout', function () {
-      var timeoutInSeconds = Math.floor(xhr.timeout / 1000);
-      error = ':<br><br><small>Превышено время выполнения (' + timeoutInSeconds + ' секунд)</small>';
-      showResultMessage(errorMessage, error);
+      showResultMessage(errorMessage);
     });
 
     xhr.open('POST', URL);

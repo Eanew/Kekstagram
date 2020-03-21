@@ -23,11 +23,7 @@
     ARROW_RIGHT_KEY: ARROW_RIGHT_KEY,
     NUMBERS_DISMATCH: NUMBERS_DISMATCH,
     EMPTY_SPACE_MATCH: EMPTY_SPACE_MATCH,
-    setModalOpenedMode: function () {
-      setModalOpenedMode();
-    },
-    setModalClosedMode: function () {
-      setModalClosedMode();
-    }
+    setModalOpenedMode: setModalOpenedMode,
+    setModalClosedMode: setModalClosedMode
   };
 })();

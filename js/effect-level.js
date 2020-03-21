@@ -100,8 +100,6 @@
   });
 
   window.effectLevel = {
-    setValue: function () {
-      setEffectLevelValue();
-    }
+    setValue: setEffectLevelValue
   };
 })();

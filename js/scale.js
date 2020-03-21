@@ -32,8 +32,6 @@
   window.scale = {
     maxValue: maxScaleValue,
     currentValue: maxScaleValue,
-    switchImgSize: function () {
-      switchImgSize();
-    }
+    switchImgSize: switchImgSize
   };
 })();

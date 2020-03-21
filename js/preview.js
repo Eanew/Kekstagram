@@ -10,7 +10,7 @@
   var commentsLoader = bigPicture.querySelector('.comments-loader');
   var commentsList = bigPicture.querySelector('.social__comments');
   var commentsCount = bigPicture.querySelector('.social__comment-count');
-  var commentsCountText;
+  var amountComments = commentsCount.querySelector('.comments-amount');
   var selectedPicture;
   var photos = {};
 
@@ -41,7 +41,7 @@
       commentsLoader.removeEventListener('click', commentsLoaderClickHandler);
     }
     startIndex += COMMENTS_DISPLAY_STEP;
-    commentsCount.innerHTML = commentsCountText.replace(FIRST_NUMBER_MATCH, commentsAmount);
+    amountComments.textContent = amountComments.textContent.replace(FIRST_NUMBER_MATCH, commentsAmount);
     commentsList.appendChild(collectCommentsFragment(currentPhoto, startIndex, commentsAmount));
   };
 
@@ -55,7 +55,7 @@
       commentsLoader.classList.remove('hidden');
       commentsLoader.addEventListener('click', commentsLoaderClickHandler);
     }
-    commentsCount.innerHTML = commentsCountText.replace(FIRST_NUMBER_MATCH, commentsAmount);
+    amountComments.textContent = amountComments.textContent.replace(FIRST_NUMBER_MATCH, commentsAmount);
     commentsList.appendChild(collectCommentsFragment(photo, startIndex, commentsAmount));
   };
 
@@ -64,13 +64,8 @@
     bigPicture.querySelector('.social__caption').textContent = photo.description;
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
     bigPicture.querySelector('.likes-count').textContent = photo.likes;
-    commentsCountText = commentsCount.innerHTML;
 
-    if (photo.comments) {
-      addComments(photo);
-    } else {
-      commentsCount.innerHTML = 'Оставьте первый комментарий!';
-    }
+    addComments(photo);
   };
 
   var previewPictureClickHandler = function (evt) {
@@ -118,7 +113,6 @@
   var closeBigPicture = function () {
     document.removeEventListener('keydown', bigPictureEscPressHandler);
     bigPicture.classList.add('hidden');
-    commentsCount.innerHTML = commentsCountText;
     selectedPicture.focus();
     window.util.setModalClosedMode();
     clearCommentList();
@@ -126,8 +120,6 @@
 
   window.preview = {
     photos: photos,
-    addClickHandler: function () {
-      addPreviewClickHandler();
-    }
+    addClickHandler: addPreviewClickHandler
   };
 })();

@@ -47,8 +47,6 @@
   window.filters = {
     DEFAULT_CLASS: DEFAULT_FILTER_CLASS,
     data: currentFilter,
-    refresh: function (filter) {
-      refreshCurrentFilter(filter);
-    }
+    refresh: refreshCurrentFilter
   };
 })();
