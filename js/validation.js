@@ -11,6 +11,16 @@
   var hashTagInput = uploadText.querySelector('.text__hashtags');
   var descriptionInput = uploadText.querySelector('.text__description');
 
+  var setInvalidBorder = function (input) {
+    input.style.borderColor = 'red';
+    input.style.outlineColor = 'red';
+  };
+
+  var removeInvalidBorder = function (input) {
+    input.style.borderColor = '';
+    input.style.outlineColor = '';
+  };
+
   var checkHashTagsValidity = function () {
     var hashTagsLimit = 5;
     var isHashTagValid;
@@ -46,22 +56,37 @@
         }
       }
     });
-    hashTagInput.setCustomValidity(customValidityConstructor);
+
+    if (customValidityConstructor) {
+      hashTagInput.setCustomValidity(customValidityConstructor);
+    } else {
+      removeInvalidBorder(hashTagInput);
+    }
   };
 
   hashTagInput.addEventListener('input', function () {
     checkHashTagsValidity();
   });
 
+  hashTagInput.addEventListener('invalid', function () {
+    setInvalidBorder(hashTagInput);
+  });
+
   var checkDescriptionValidity = function () {
     descriptionInput.setCustomValidity('');
     if (descriptionInput.value.length > COMMENT_MAX_LENGTH) {
       descriptionInput.setCustomValidity('Максимальная длина комментария - 140 символов.');
+    } else {
+      removeInvalidBorder(descriptionInput);
     }
   };
 
   descriptionInput.addEventListener('input', function () {
     checkDescriptionValidity();
+  });
+
+  descriptionInput.addEventListener('invalid', function () {
+    setInvalidBorder(descriptionInput);
   });
 
   uploadText.addEventListener('keydown', function (evt) {

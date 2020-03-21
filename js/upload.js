@@ -67,7 +67,6 @@
 
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-    console.log(getComputedStyle(hashTagInput).border);
     hashTagInput.value = hashTagInput.value
     .replace(EMPTY_SPACE_IN_EDGES_MATCH, '')
     .replace(window.util.EMPTY_SPACE_MATCH, window.util.SPACE);
