@@ -2,6 +2,7 @@
 
 (function () {
   var EMPTY_SPACE_IN_EDGES_MATCH = /^\s+|\s+(?!.)/g;
+  var UPLOADING_MESSAGE_TIMEOUT = 100;
 
   var pageMain = document.querySelector('main');
   var filters = document.querySelector('.img-filters');
@@ -64,6 +65,9 @@
 
   backend.load(loadSuccessHandler);
 
+  var isResultAlreadyReceived = false;
+  var uploadingMessageTimeout;
+
   var showUploadingMessage = function (xhr) {
     uploadingMessage = uploadingMessageTemplate.cloneNode(true);
     uploadingMessage.addEventListener('keydown', function (evt) {
@@ -74,12 +78,20 @@
         uploadOverlay.classList.remove('hidden');
       }
     });
-    uploadOverlay.classList.add('hidden');
-    pageMain.insertAdjacentElement('afterbegin', uploadingMessage);
-    uploadingMessage.focus();
+    if (uploadingMessageTimeout) {
+      window.clearTimeout(uploadingMessageTimeout);
+    }
+    uploadingMessageTimeout = window.setTimeout(function () {
+      if (!isResultAlreadyReceived) {
+        uploadOverlay.classList.add('hidden');
+        pageMain.insertAdjacentElement('afterbegin', uploadingMessage);
+        uploadingMessage.focus();
+      }
+    }, UPLOADING_MESSAGE_TIMEOUT);
   };
 
   var showResultMessage = function (template) {
+    isResultAlreadyReceived = true;
     var overlay = template.cloneNode(true);
     var inner = overlay.querySelector('div');
     var button = overlay.querySelector('button');
@@ -127,6 +139,7 @@
 
   uploadForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
+    isResultAlreadyReceived = false;
     hashTagInput.value = hashTagInput.value
     .replace(EMPTY_SPACE_IN_EDGES_MATCH, '')
     .replace(window.util.EMPTY_SPACE_MATCH, window.util.SPACE);
