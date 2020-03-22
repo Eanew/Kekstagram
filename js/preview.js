@@ -29,6 +29,8 @@
     return fragment;
   };
 
+  // Задание по загрузке комментариев
+
   var currentPhoto = {};
   var commentsAmount = 0;
   var startIndex = 0;
