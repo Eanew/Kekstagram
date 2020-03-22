@@ -132,10 +132,5 @@
     .replace(window.util.EMPTY_SPACE_MATCH, window.util.SPACE);
     backend.save(showSuccessMessage, showErrorMessage, showUploadingMessage, new FormData(uploadForm));
   });
-
-  window.backend = {
-    load: backend.load,
-    refreshPictures: loadSuccessHandler
-  };
 })();
 

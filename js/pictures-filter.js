@@ -1,24 +1,44 @@
 'use strict';
 
 (function () {
+  var FILTER_REFRESH_TIMEOUT = 500;
   var RANDOM_PICTURES_COUNT = 10;
+  var ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
   var filters = document.querySelector('.img-filters');
   var form = filters.querySelector('.img-filters__form');
   var defaultFilter = form.querySelector('#filter-default');
   var randomFilter = form.querySelector('#filter-random');
   var discussedFilter = form.querySelector('#filter-discussed');
-  var picturesContainer = document.querySelector('.pictures');
+  var pictures = document.querySelector('.pictures');
 
   var clearPictureList = function () {
-    var pictures = picturesContainer.querySelectorAll('.picture');
-    pictures.forEach(function (picture) {
+    pictures.querySelectorAll('.picture').forEach(function (picture) {
       picture.remove();
     });
   };
 
-  defaultFilter.addEventListener('click', function () {
+  var renderPicturesTimeout;
+  var renderNewPictures = function (photos) {
+    if (renderPicturesTimeout) {
+      window.clearTimeout(renderPicturesTimeout);
+    }
+    renderPicturesTimeout = window.setTimeout(function () {
+      window.pictures.addToPage(photos);
+      window.preview.addClickHandler();
+    }, FILTER_REFRESH_TIMEOUT);
+  };
+
+  var setActiveButton = function (evt) {
+    if (evt.target && !evt.target.classList.contains(ACTIVE_BUTTON_CLASS)) {
+      form.querySelector('.' + ACTIVE_BUTTON_CLASS).classList.remove(ACTIVE_BUTTON_CLASS);
+      evt.target.classList.add(ACTIVE_BUTTON_CLASS);
+    }
+  };
+
+  defaultFilter.addEventListener('click', function (evt) {
+    setActiveButton(evt);
     clearPictureList();
-    window.backend.load(window.backend.refreshPictures);
+    renderNewPictures(window.preview.photos);
   });
 
   var getRandomCount = function (min, max) {
@@ -30,22 +50,21 @@
     return collection.splice(randomCount, 1)[0];
   };
 
-  var setPicturesRandomFilter = function (response) {
+  randomFilter.addEventListener('click', function (evt) {
+    setActiveButton(evt);
+    var photos = window.preview.photos.slice();
     var randomPictures = [];
     for (var i = 0; i < RANDOM_PICTURES_COUNT; i++) {
-      randomPictures.push(getUniqueRandomItem(response));
+      randomPictures.push(getUniqueRandomItem(photos));
     }
-    window.backend.refreshPictures(randomPictures);
-  };
-
-  randomFilter.addEventListener('click', function () {
     clearPictureList();
-    window.backend.load(setPicturesRandomFilter);
+    renderNewPictures(randomPictures);
   });
 
-  var setPicturesDiscussedFilter = function (response) {
-    var responseCloned = response.slice();
-    responseCloned.sort(function (first, second) {
+  discussedFilter.addEventListener('click', function (evt) {
+    setActiveButton(evt);
+    var photos = window.preview.photos.slice();
+    photos.sort(function (first, second) {
       if (first.comments.length < second.comments.length) {
         return 1;
       } else if (first.comments.length > second.comments.length) {
@@ -54,11 +73,7 @@
         return 0;
       }
     });
-    window.backend.refreshPictures(responseCloned);
-  };
-
-  discussedFilter.addEventListener('click', function () {
     clearPictureList();
-    window.backend.load(setPicturesDiscussedFilter);
+    renderNewPictures(photos);
   });
 })();
