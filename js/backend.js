@@ -4,6 +4,7 @@
   var EMPTY_SPACE_IN_EDGES_MATCH = /^\s+|\s+(?!.)/g;
 
   var pageMain = document.querySelector('main');
+  var filters = document.querySelector('.img-filters');
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
   var hashTagInput = uploadForm.querySelector('.text__hashtags');
@@ -58,6 +59,7 @@
       window.preview.photos.push(element);
     });
     window.preview.addClickHandler();
+    filters.classList.remove('img-filters--inactive');
   };
 
   backend.load(loadSuccessHandler);
@@ -130,5 +132,10 @@
     .replace(window.util.EMPTY_SPACE_MATCH, window.util.SPACE);
     backend.save(showSuccessMessage, showErrorMessage, showUploadingMessage, new FormData(uploadForm));
   });
+
+  window.backend = {
+    load: backend.load,
+    refreshPictures: loadSuccessHandler
+  };
 })();
 
