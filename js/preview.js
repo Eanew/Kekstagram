@@ -3,6 +3,7 @@
 (function () {
   var FIRST_NUMBER_MATCH = /\d+/;
   var COMMENTS_DISPLAY_STEP = 5;
+
   var pictures = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureCancelButton = bigPicture.querySelector('.big-picture__cancel');
@@ -11,8 +12,8 @@
   var commentsList = bigPicture.querySelector('.social__comments');
   var commentsCount = bigPicture.querySelector('.social__comment-count');
   var amountComments = commentsCount.querySelector('.comments-amount');
-  var selectedPicture;
-  var photos = {};
+  var selectedPicture = '';
+  var photos = [];
 
   var collectCommentsFragment = function (photo, startIndex, commentsAmount) {
     var fragment = document.createDocumentFragment();
@@ -28,9 +29,9 @@
     return fragment;
   };
 
-  var currentPhoto;
-  var commentsAmount;
-  var startIndex;
+  var currentPhoto = {};
+  var commentsAmount = 0;
+  var startIndex = 0;
 
   var commentsLoaderClickHandler = function () {
     if (currentPhoto.comments.length > (commentsAmount + COMMENTS_DISPLAY_STEP)) {
@@ -73,7 +74,7 @@
     evt.stopPropagation();
     selectedPicture = evt.currentTarget;
 
-    var picture = photos.data.filter(function (photo) {
+    var picture = photos.filter(function (photo) {
       return photo.url === selectedPicture.querySelector('.picture__img').getAttribute('src');
     })[0];
     constructBigPicture(picture);

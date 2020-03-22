@@ -8,10 +8,10 @@
   var effectLine = effectLevel.querySelector('.effect-level__line');
   var effectDepth = effectLine.querySelector('.effect-level__depth');
   var effectPin = effectLine.querySelector('.effect-level__pin');
-  var effectLineWidth;
-  var effectPinX;
-  var fixedEffectValue;
-  var totalValue;
+  var effectLineWidth = '';
+  var effectPinX = '';
+  var fixedEffectValue = '';
+  var totalValue = '';
 
   var getPinPositionInPercent = function () {
     effectPinX = effectPin.style.left.replace('px', '');
@@ -35,7 +35,7 @@
   };
 
   effectLevel.addEventListener('mousedown', function (evt) {
-    var startCoordX;
+    var startCoordX = '';
     var effectLineStart = effectLine.getBoundingClientRect().left;
     if ((evt.clientX - effectLineStart) >= 0 && evt.clientX <= (effectLineStart + effectLineWidth)) {
       startCoordX = evt.clientX;
@@ -73,7 +73,7 @@
   });
 
   effectLevel.addEventListener('keydown', function (evt) {
-    var pinDirection;
+    var pinDirection = '';
 
     var movePin = function () {
       var pinStep = effectLineWidth / 50;

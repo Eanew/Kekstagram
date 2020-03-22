@@ -23,11 +23,10 @@
 
   var checkHashTagsValidity = function () {
     var hashTagsLimit = 5;
-    var isHashTagValid;
-    var isSimilarityFinded;
-    var hashTags;
+    var isHashTagValid = true;
+    var isSimilarityFinded = false;
+    var hashTags = [];
     var customValidityConstructor = '';
-    hashTagInput.setCustomValidity(customValidityConstructor);
     hashTags = hashTagInput.value.split(window.util.EMPTY_SPACE_MATCH);
     if (hashTags[0] === '') {
       hashTagsLimit++;
@@ -57,9 +56,8 @@
       }
     });
 
-    if (customValidityConstructor) {
-      hashTagInput.setCustomValidity(customValidityConstructor);
-    } else {
+    hashTagInput.setCustomValidity(customValidityConstructor);
+    if (!customValidityConstructor) {
       removeInvalidBorder(hashTagInput);
     }
   };
