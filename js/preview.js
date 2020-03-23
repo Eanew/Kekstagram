@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var ERROR_MESSAGE_TIMEOUT = 6000;
   var COMMENTS_DISPLAY_STEP = 5;
 
   var filters = document.querySelector('.img-filters');
@@ -126,7 +127,11 @@
     filters.classList.remove('img-filters--inactive');
   };
 
-  window.backend.load(loadSuccessHandler);
+  var loadErrorHandler = function () {
+    window.util.showAlert('Ошибка загрузки данных', 'orange', ERROR_MESSAGE_TIMEOUT);
+  };
+
+  window.backend.load(loadSuccessHandler, loadErrorHandler);
 
   window.preview = {
     photos: photos,
