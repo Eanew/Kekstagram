@@ -4,6 +4,7 @@
   var FIRST_NUMBER_MATCH = /\d+/;
   var COMMENTS_DISPLAY_STEP = 5;
 
+  var filters = document.querySelector('.img-filters');
   var pictures = document.querySelector('.pictures');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureCancelButton = bigPicture.querySelector('.big-picture__cancel');
@@ -118,6 +119,17 @@
     window.util.setModalClosedMode();
     clearCommentList();
   };
+
+  var loadSuccessHandler = function (response) {
+    window.pictures.addToPage(response);
+    response.forEach(function (element) {
+      photos.push(element);
+    });
+    addPreviewClickHandler();
+    filters.classList.remove('img-filters--inactive');
+  };
+
+  window.backend.load(loadSuccessHandler);
 
   window.preview = {
     photos: photos,

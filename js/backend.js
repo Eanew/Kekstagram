@@ -8,7 +8,6 @@
   };
 
   var pageMain = document.querySelector('main');
-  var filters = document.querySelector('.img-filters');
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
   var hashTagInput = uploadForm.querySelector('.text__hashtags');
@@ -16,17 +15,6 @@
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
   var uploadingMessageTemplate = document.querySelector('#messages').content.querySelector('.img-upload__message');
   var uploadingMessage = '';
-
-  var backend = {
-    load: function (successHandler, errorHandler) {
-      var URL = 'https://js.dump.academy/kekstagram/data';
-      createRequest('GET', URL, successHandler, errorHandler);
-    },
-    save: function (successHandler, errorHandler, loadingHandler, data) {
-      var URL = 'https://js.dump.academy/kekstagram';
-      createRequest('POST', URL, successHandler, errorHandler, loadingHandler, data);
-    }
-  };
 
   var createRequest = function (method, url, successHandler, errorHandler, loadingHandler, data) {
     var xhr = new XMLHttpRequest();
@@ -57,21 +45,21 @@
     }
   };
 
-  var loadSuccessHandler = function (response) {
-    window.pictures.addToPage(response);
-    response.forEach(function (element) {
-      window.preview.photos.push(element);
-    });
-    window.preview.addClickHandler();
-    filters.classList.remove('img-filters--inactive');
+  window.backend = {
+    load: function (successHandler, errorHandler) {
+      var URL = 'https://js.dump.academy/kekstagram/data';
+      createRequest('GET', URL, successHandler, errorHandler);
+    },
+    save: function (successHandler, errorHandler, loadingHandler, data) {
+      var URL = 'https://js.dump.academy/kekstagram';
+      createRequest('POST', URL, successHandler, errorHandler, loadingHandler, data);
+    }
   };
 
-  backend.load(loadSuccessHandler);
-
   var isResultAlreadyReceived = false;
-  var uploadingMessageTimeout;
 
   var showUploadingMessage = function (xhr) {
+    uploadOverlay.classList.add('hidden');
     uploadingMessage = uploadingMessageTemplate.cloneNode(true);
     uploadingMessage.addEventListener('keydown', function (evt) {
       if (evt.key === window.util.ESC_KEY) {
@@ -81,12 +69,8 @@
         uploadOverlay.classList.remove('hidden');
       }
     });
-    if (uploadingMessageTimeout) {
-      window.clearTimeout(uploadingMessageTimeout);
-    }
-    uploadingMessageTimeout = window.setTimeout(function () {
+    window.setTimeout(function () {
       if (!isResultAlreadyReceived) {
-        uploadOverlay.classList.add('hidden');
         pageMain.insertAdjacentElement('afterbegin', uploadingMessage);
         uploadingMessage.focus();
       }
@@ -146,7 +130,7 @@
     hashTagInput.value = hashTagInput.value
     .replace(EMPTY_SPACE_IN_EDGES_MATCH, '')
     .replace(window.util.EMPTY_SPACE_MATCH, window.util.SPACE);
-    backend.save(showSuccessMessage, showErrorMessage, showUploadingMessage, new FormData(uploadForm));
+    window.backend.save(showSuccessMessage, showErrorMessage, showUploadingMessage, new FormData(uploadForm));
   });
 })();
 
