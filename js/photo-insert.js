@@ -3,7 +3,7 @@
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-  window.photoInsert = function (evt, image, successHandler) {
+  window.photoInsert = function (evt, image, input, successHandler) {
     var file = evt.target.files[0];
     var fileName = file.name.toLowerCase();
 
@@ -12,13 +12,17 @@
     });
 
     if (matches) {
+      input.disabled = true;
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
+        input.disabled = false;
         image.src = reader.result;
+        successHandler();
       });
       reader.readAsDataURL(file);
-      successHandler();
+    } else {
+      window.util.showErrorAlert('Выбран неподходящий формат файла');
     }
   };
 })();

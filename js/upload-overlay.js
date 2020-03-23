@@ -33,6 +33,7 @@
 
   var setDefaultUploadSettings = function () {
     uploadForm.reset();
+    uploadPreviewImg.src = '';
     setDefaultFilter(window.filters);
     setDefaultScale(window.scale);
     resetValidation();
@@ -59,7 +60,7 @@
   };
 
   uploadInput.addEventListener('change', function (evt) {
-    window.photoInsert(evt, uploadPreviewImg, openUploadOverlay);
+    window.photoInsert(evt, uploadPreviewImg, uploadInput, openUploadOverlay);
   });
 
   overlayCloseButton.addEventListener('click', function (evt) {
