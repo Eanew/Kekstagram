@@ -13,6 +13,7 @@
 
     if (matches) {
       input.disabled = true;
+      window.util.showAlert('Загрузка..', 'lightblue', 700);
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
@@ -22,7 +23,7 @@
       });
       reader.readAsDataURL(file);
     } else {
-      window.util.showErrorAlert('Выбран неподходящий формат файла');
+      window.util.showAlert('Выбран неподходящий формат файла', 'orange', 2500);
     }
   };
 })();

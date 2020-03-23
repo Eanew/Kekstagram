@@ -16,11 +16,11 @@
     document.querySelector('body').classList.remove('modal-open');
   };
 
-  var showErrorAlert = function (alert) {
+  var showAlert = function (alert, color, timeout) {
     var message = document.createElement('div');
     message.textContent = alert;
+    message.style.background = color;
     message.style.position = 'absolute';
-    message.style.background = 'orange';
     message.style.fontSize = '20px';
     message.style.textAlign = 'center';
     message.style.padding = '15px';
@@ -30,7 +30,7 @@
     document.body.insertAdjacentElement('afterbegin', message);
     window.setTimeout(function () {
       message.remove();
-    }, 3000);
+    }, timeout);
   };
 
   window.util = {
@@ -42,6 +42,6 @@
     EMPTY_SPACE_MATCH: EMPTY_SPACE_MATCH,
     setModalOpenedMode: setModalOpenedMode,
     setModalClosedMode: setModalClosedMode,
-    showErrorAlert: showErrorAlert
+    showAlert: showAlert
   };
 })();
