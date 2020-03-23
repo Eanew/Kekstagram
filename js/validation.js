@@ -8,7 +8,7 @@
   var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
   var uploadText = uploadOverlay.querySelector('.img-upload__text');
   var hashTagInput = uploadText.querySelector('.text__hashtags');
-  var descriptionInput = uploadText.querySelector('.text__description');
+  // var descriptionInput = uploadText.querySelector('.text__description');
 
   var setInvalidBorder = function (input) {
     input.style.borderColor = 'red';

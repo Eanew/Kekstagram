@@ -8,7 +8,7 @@
   var uploadPreviewImg = uploadOverlay.querySelector('.img-upload__preview').querySelector('img');
   var buttonSmaller = uploadOverlay.querySelector('.scale__control--smaller');
   var hashTagInput = uploadOverlay.querySelector('.text__hashtags');
-  var descriptionInput = uploadOverlay.querySelector('.text__description');
+  // var descriptionInput = uploadOverlay.querySelector('.text__description');
 
   var setDefaultFilter = function (filter) {
     uploadPreviewImg.classList.remove(filter.imgClass);
