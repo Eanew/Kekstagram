@@ -34,15 +34,19 @@
     }
   };
 
+  var loadData = function (successHandler, errorHandler) {
+    var URL = 'https://js.dump.academy/kekstagram/data';
+    createRequest('GET', URL, successHandler, errorHandler);
+  };
+
+  var saveData = function (successHandler, errorHandler, loadingHandler, data) {
+    var URL = 'https://js.dump.academy/kekstagram';
+    createRequest('POST', URL, successHandler, errorHandler, loadingHandler, data);
+  };
+
   window.backend = {
-    load: function (successHandler, errorHandler) {
-      var URL = 'https://js.dump.academy/kekstagram/data';
-      createRequest('GET', URL, successHandler, errorHandler);
-    },
-    save: function (successHandler, errorHandler, loadingHandler, data) {
-      var URL = 'https://js.dump.academy/kekstagram';
-      createRequest('POST', URL, successHandler, errorHandler, loadingHandler, data);
-    }
+    load: loadData,
+    save: saveData
   };
 })();
 

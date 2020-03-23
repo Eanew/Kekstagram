@@ -58,7 +58,7 @@
   };
 
   uploadInput.addEventListener('change', function (evt) {
-    window.photoInsert(evt, uploadPreviewImg, uploadInput, openUploadOverlay);
+    window.photo.insert(evt, uploadPreviewImg, uploadInput, openUploadOverlay);
   });
 
   overlayCloseButton.addEventListener('click', function (evt) {
