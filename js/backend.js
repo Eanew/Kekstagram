@@ -3,6 +3,9 @@
 (function () {
   var EMPTY_SPACE_IN_EDGES_MATCH = /^\s+|\s+(?!.)/g;
   var UPLOADING_MESSAGE_TIMEOUT = 100;
+  var RequestStatus = {
+    SUCCESS: 200
+  };
 
   var pageMain = document.querySelector('main');
   var filters = document.querySelector('.img-filters');
@@ -30,7 +33,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === RequestStatus.SUCCESS) {
         successHandler(xhr.response);
       } else {
         errorHandler('Статус ответа' + xhr.status + ' ' + xhr.statusText);
