@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var SCALE_STEP = 25;
   var MIN_SCALE_VALUE = 25;
   var MAX_SCALE_VALUE = 100;
 
@@ -13,19 +14,19 @@
 
   var switchImgSize = function () {
     imgScaleInput.value = window.scale.currentValue + '%';
-    uploadPreviewImg.style.transform = 'scale(' + window.scale.currentValue / 100 + ')';
+    uploadPreviewImg.style.transform = 'scale(' + window.scale.currentValue / MAX_SCALE_VALUE + ')';
   };
 
   buttonSmaller.addEventListener('click', function () {
     if (window.scale.currentValue > MIN_SCALE_VALUE) {
-      window.scale.currentValue -= 25;
+      window.scale.currentValue -= SCALE_STEP;
       switchImgSize();
     }
   });
 
   buttonBigger.addEventListener('click', function () {
     if (window.scale.currentValue < MAX_SCALE_VALUE) {
-      window.scale.currentValue += 25;
+      window.scale.currentValue += SCALE_STEP;
       switchImgSize();
     }
   });

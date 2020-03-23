@@ -7,6 +7,8 @@
   var overlayCloseButton = uploadOverlay.querySelector('#upload-cancel');
   var uploadPreviewImg = uploadOverlay.querySelector('.img-upload__preview').querySelector('img');
   var buttonSmaller = uploadOverlay.querySelector('.scale__control--smaller');
+  var hashTagInput = uploadOverlay.querySelector('.text__hashtags');
+  var descriptionInput = uploadOverlay.querySelector('.text__description');
 
   var setDefaultFilter = function (filter) {
     uploadPreviewImg.classList.remove(filter.imgClass);
@@ -22,10 +24,18 @@
     }
   };
 
+  var resetValidation = function () {
+    hashTagInput.setCustomValidity('');
+    descriptionInput.setCustomValidity('');
+    window.validation.removeInvalidBorder(hashTagInput);
+    window.validation.removeInvalidBorder(descriptionInput);
+  };
+
   var setDefaultUploadSettings = function () {
     uploadForm.reset();
     setDefaultFilter(window.filters);
     setDefaultScale(window.scale);
+    resetValidation();
   };
 
   var uploadOverlayEscPressHandler = function (evt) {

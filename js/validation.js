@@ -93,4 +93,8 @@
       evt.target.blur();
     }
   });
+
+  window.validation = {
+    removeInvalidBorder: removeInvalidBorder
+  };
 })();

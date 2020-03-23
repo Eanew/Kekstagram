@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var PERCENT_PROPORTION_COUNT = 100;
+  var PIN_STEP_REDUCING_COUNT = 50;
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadPreviewImg = uploadOverlay.querySelector('.img-upload__preview').querySelector('img');
   var effectLevel = uploadOverlay.querySelector('.effect-level');
@@ -8,14 +10,14 @@
   var effectLine = effectLevel.querySelector('.effect-level__line');
   var effectDepth = effectLine.querySelector('.effect-level__depth');
   var effectPin = effectLine.querySelector('.effect-level__pin');
-  var effectLineWidth = '';
-  var effectPinX = '';
-  var fixedEffectValue = '';
-  var totalValue = '';
+  var effectLineWidth = 0;
+  var effectPinX = 0;
+  var fixedEffectValue = 0;
+  var totalValue = 0;
 
   var getPinPositionInPercent = function () {
     effectPinX = effectPin.style.left.replace('px', '');
-    return Math.round(effectPinX / effectLineWidth * 100);
+    return Math.round(effectPinX / effectLineWidth * PERCENT_PROPORTION_COUNT);
   };
 
   var setEffectSaturation = function (filter) {
@@ -76,7 +78,7 @@
     var pinDirection = '';
 
     var movePin = function () {
-      var pinStep = effectLineWidth / 50;
+      var pinStep = effectLineWidth / PIN_STEP_REDUCING_COUNT;
       var shiftX = pinDirection * pinStep;
       var totalX = +effectPin.style.left.replace('px', '') + shiftX;
       if (totalX < 0) {
