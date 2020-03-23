@@ -55,10 +55,8 @@
       var totalX = +effectPin.style.left.replace('px', '') + shiftX;
       if (totalX >= 0 && totalX <= effectLineWidth) {
         startCoordX = moveEvt.clientX;
-      } else if (totalX < 0) {
-        totalX = 0;
       } else {
-        totalX = effectLineWidth;
+        totalX = totalX < 0 ? 0 : effectLineWidth;
       }
       effectPin.style.left = totalX + 'px';
       setEffectLevelValue();
