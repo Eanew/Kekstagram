@@ -26,9 +26,9 @@
 
   var resetValidation = function () {
     hashTagInput.setCustomValidity('');
-    descriptionInput.setCustomValidity('');
+    // descriptionInput.setCustomValidity('');
+    // window.validation.removeInvalidBorder(descriptionInput);
     window.validation.removeInvalidBorder(hashTagInput);
-    window.validation.removeInvalidBorder(descriptionInput);
   };
 
   var setDefaultUploadSettings = function () {

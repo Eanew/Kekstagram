@@ -2,7 +2,7 @@
 
 (function () {
   var HASH_TAG_MAX_LENGTH = 20;
-  var COMMENT_MAX_LENGTH = 140;
+  // var COMMENT_MAX_LENGTH = 140;
 
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
@@ -69,22 +69,23 @@
     setInvalidBorder(hashTagInput);
   });
 
-  var checkDescriptionValidity = function () {
-    descriptionInput.setCustomValidity('');
-    if (descriptionInput.value.length > COMMENT_MAX_LENGTH) {
-      descriptionInput.setCustomValidity('Максимальная длина комментария - 140 символов.');
-    } else {
-      removeInvalidBorder(descriptionInput);
-    }
-  };
+  // var checkDescriptionValidity = function () {
+  //   descriptionInput.setCustomValidity('');
+  //   if (descriptionInput.value.length > COMMENT_MAX_LENGTH) {
+  //     descriptionInput.setCustomValidity('Максимальная длина комментария - 140 символов.');
+  //   } else {
+  //     removeInvalidBorder(descriptionInput);
+  //   }
+  // };
 
-  descriptionInput.addEventListener('input', function () {
-    checkDescriptionValidity();
-  });
+  // descriptionInput.addEventListener('input', function () {
+  //   checkDescriptionValidity();
+  // });
 
-  descriptionInput.addEventListener('invalid', function () {
-    setInvalidBorder(descriptionInput);
-  });
+  // descriptionInput.addEventListener('invalid', function () {
+  //   descriptionInput.setCustomValidity('Максимальная длина комментария - 140 символов.');
+  //   setInvalidBorder(descriptionInput);
+  // });
 
   uploadText.addEventListener('keydown', function (evt) {
     if (evt.key === window.util.Key.ESC) {
