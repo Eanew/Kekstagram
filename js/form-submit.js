@@ -14,8 +14,20 @@
   var uploadingMessage = '';
   var isResultAlreadyReceived = false;
 
+  var uploadingMessageClickHandler = function () {
+    document.removeEventListener('click', uploadingMessageClickHandler);
+    uploadingMessage.remove();
+  };
+
   var showUploadingMessage = function (xhr) {
     uploadingMessage = uploadingMessageTemplate.cloneNode(true);
+
+    uploadingMessage.addEventListener('click', function (evt) {
+      evt.stopPropagation();
+    });
+
+    document.addEventListener('click', uploadingMessageClickHandler);
+
     uploadingMessage.addEventListener('keydown', function (evt) {
       if (evt.key === window.util.Key.ESC) {
         evt.stopPropagation();
@@ -23,8 +35,10 @@
         uploadingMessage.remove();
         submitButton.disabled = false;
         uploadOverlay.classList.remove('hidden');
+        document.removeEventListener('click', uploadingMessageClickHandler);
       }
     });
+
     window.setTimeout(function () {
       if (!isResultAlreadyReceived) {
         uploadOverlay.classList.add('hidden');
@@ -42,15 +56,14 @@
     var button = overlay.querySelector('button');
 
     var closeResultMessage = function () {
-      document.removeEventListener('keydown', overlayEscPressHandler);
       overlay.remove();
       window.util.setModalClosedMode();
     };
 
-    var overlayEscPressHandler = function (evt) {
+    overlay.addEventListener('keydown', function (evt) {
+      evt.stopPropagation();
       window.util.isEscEvent(evt, closeResultMessage);
-    };
-    document.addEventListener('keydown', overlayEscPressHandler);
+    });
 
     inner.addEventListener('click', function (evt) {
       evt.stopPropagation();
@@ -68,6 +81,7 @@
     window.util.setModalOpenedMode();
     overlay.style.zIndex = '1000';
     uploadingMessage.remove();
+    document.removeEventListener('click', uploadingMessageClickHandler);
     pageMain.insertAdjacentElement('afterbegin', overlay);
     button.focus();
   };

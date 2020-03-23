@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var FILTER_REFRESH_TIMEOUT = 500;
+  var FILTER_REFRESH_TIMEOUT = 300;
   var RANDOM_PICTURES_COUNT = 10;
   var ACTIVE_BUTTON_CLASS = 'img-filters__button--active';
   var filters = document.querySelector('.img-filters');
