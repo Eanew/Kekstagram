@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var VALID_HASH_TAG_MATCH = /^#[A-Za-zА-Яа-я0-9]+/;
   var HASH_TAG_MAX_LENGTH = 20;
   var COMMENT_MAX_LENGTH = 140;
 
@@ -27,7 +26,7 @@
     var isSimilarityFinded = false;
     var hashTags = [];
     var customValidityConstructor = '';
-    hashTags = hashTagInput.value.split(window.util.EMPTY_SPACE_MATCH);
+    hashTags = hashTagInput.value.split(window.util.Regular.EMPTY_SPACE);
     if (hashTags[0] === '') {
       hashTagsLimit++;
     }
@@ -38,7 +37,7 @@
       customValidityConstructor += 'Максимальное число хэш-тегов - 5. Хэш-тэги разделяются пробелами. ';
     }
     hashTags.forEach(function (hashTag, i) {
-      isHashTagValid = !hashTag.replace(VALID_HASH_TAG_MATCH, '');
+      isHashTagValid = !hashTag.replace(window.util.Regular.VALID_HASH_TAG, '');
       if (!isHashTagValid) {
         customValidityConstructor += 'Хэш-тег начинается с решётки (#) и состоит из цифр и букв, в т.ч. заглавных. ';
       }
@@ -88,7 +87,7 @@
   });
 
   uploadText.addEventListener('keydown', function (evt) {
-    if (evt.key === window.util.ESC_KEY) {
+    if (evt.key === window.util.Key.ESC) {
       evt.stopPropagation();
       evt.target.blur();
     }

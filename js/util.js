@@ -1,12 +1,30 @@
 'use strict';
 
 (function () {
+  var PERCENT_PROPORTION_COUNT = 100;
   var SPACE = ' ';
-  var ESC_KEY = 'Escape';
-  var ARROW_LEFT_KEY = 'ArrowLeft';
-  var ARROW_RIGHT_KEY = 'ArrowRight';
-  var NUMBERS_DISMATCH = /(\D+)*[^.\d]/g;
-  var EMPTY_SPACE_MATCH = /\s+/g;
+
+  var Key = {
+    SPACE: ' ',
+    ESC: 'Escape',
+    ENTER: 'Enter',
+    ARROW_LEFT: 'ArrowLeft',
+    ARROW_RIGHT: 'ArrowRight'
+  };
+
+  var Regular = {
+    EXCEPT_NUMBERS: /(\D+)*[^.\d]/g,
+    FIRST_NUMBER: /\d+/,
+    EMPTY_SPACE: /\s+/g,
+    EMPTY_SPACE_IN_EDGES: /^\s+|\s+(?!.)/g,
+    VALID_HASH_TAG: /^#[A-Za-zА-Яа-я0-9]+/
+  };
+
+  var isEscEvent = function (evt, action) {
+    if (evt.key === Key.ESC) {
+      action();
+    }
+  };
 
   var setModalOpenedMode = function () {
     document.querySelector('body').classList.add('modal-open');
@@ -34,12 +52,11 @@
   };
 
   window.util = {
+    PERCENT_PROPORTION_COUNT: PERCENT_PROPORTION_COUNT,
     SPACE: SPACE,
-    ESC_KEY: ESC_KEY,
-    ARROW_LEFT_KEY: ARROW_LEFT_KEY,
-    ARROW_RIGHT_KEY: ARROW_RIGHT_KEY,
-    NUMBERS_DISMATCH: NUMBERS_DISMATCH,
-    EMPTY_SPACE_MATCH: EMPTY_SPACE_MATCH,
+    Key: Key,
+    Regular: Regular,
+    isEscEvent: isEscEvent,
     setModalOpenedMode: setModalOpenedMode,
     setModalClosedMode: setModalClosedMode,
     showAlert: showAlert

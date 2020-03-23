@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var FIRST_NUMBER_MATCH = /\d+/;
   var COMMENTS_DISPLAY_STEP = 5;
 
   var filters = document.querySelector('.img-filters');
@@ -43,7 +42,7 @@
       commentsLoader.removeEventListener('click', commentsLoaderClickHandler);
     }
     startIndex += COMMENTS_DISPLAY_STEP;
-    displayedComments.textContent = displayedComments.textContent.replace(FIRST_NUMBER_MATCH, commentsAmount);
+    displayedComments.textContent = displayedComments.textContent.replace(window.util.Regular.FIRST_NUMBER, commentsAmount);
     commentsList.appendChild(collectCommentsFragment(currentPhoto, startIndex, commentsAmount));
   };
 
@@ -57,7 +56,7 @@
       commentsLoader.classList.remove('hidden');
       commentsLoader.addEventListener('click', commentsLoaderClickHandler);
     }
-    displayedComments.textContent = displayedComments.textContent.replace(FIRST_NUMBER_MATCH, commentsAmount);
+    displayedComments.textContent = displayedComments.textContent.replace(window.util.Regular.FIRST_NUMBER, commentsAmount);
     commentsList.appendChild(collectCommentsFragment(photo, startIndex, commentsAmount));
   };
 
@@ -98,9 +97,7 @@
   });
 
   var bigPictureEscPressHandler = function (evt) {
-    if (evt.key === window.util.ESC_KEY) {
-      closeBigPicture();
-    }
+    window.util.isEscEvent(evt, closeBigPicture);
   };
 
   var clearCommentList = function () {

@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var PERCENT_PROPORTION_COUNT = 100;
   var PIN_STEP_REDUCING_COUNT = 50;
   var uploadOverlay = document.querySelector('.img-upload__overlay');
   var uploadPreviewImg = uploadOverlay.querySelector('.img-upload__preview').querySelector('img');
@@ -17,7 +16,7 @@
 
   var getPinPositionInPercent = function () {
     effectPinX = effectPin.style.left.replace('px', '');
-    return Math.round(effectPinX / effectLineWidth * PERCENT_PROPORTION_COUNT);
+    return Math.round(effectPinX / effectLineWidth * window.util.PERCENT_PROPORTION_COUNT);
   };
 
   var setEffectSaturation = function (filter) {
@@ -91,11 +90,11 @@
       setEffectLevelValue();
     };
 
-    if (evt.key === window.util.ARROW_LEFT_KEY) {
+    if (evt.key === window.util.Key.ARROW_LEFT) {
       pinDirection = -1;
       movePin();
     }
-    if (evt.key === window.util.ARROW_RIGHT_KEY) {
+    if (evt.key === window.util.Key.ARROW_RIGHT) {
       pinDirection = 1;
       movePin();
     }

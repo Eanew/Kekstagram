@@ -40,9 +40,7 @@
   };
 
   var uploadOverlayEscPressHandler = function (evt) {
-    if (evt.key === window.util.ESC_KEY) {
-      closeUploadOverlay();
-    }
+    window.util.isEscEvent(evt, closeUploadOverlay);
   };
 
   var openUploadOverlay = function () {

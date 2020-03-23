@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var PERCENT_PROPORTION_COUNT = 100;
   var DEFAULT_FILTER_CLASS = 'effects__preview--none';
   var PREVIEW_CLASS_TEMPLATE = 'effects__preview--';
   var EFFECT_ID_TEMPLATE = 'effect-';
@@ -16,8 +15,8 @@
 
   var setCurrentFilter = function () {
     currentFilter.attributeString = getComputedStyle(uploadPreviewImg).filter;
-    currentFilter.defaultValue = currentFilter.attributeString.replace(window.util.NUMBERS_DISMATCH, '');
-    currentFilter.calculableValue = currentFilter.defaultValue / PERCENT_PROPORTION_COUNT;
+    currentFilter.defaultValue = currentFilter.attributeString.replace(window.util.Regular.EXCEPT_NUMBERS, '');
+    currentFilter.calculableValue = currentFilter.defaultValue / window.util.PERCENT_PROPORTION_COUNT;
   };
 
   var refreshCurrentFilter = function (filter) {

@@ -2,6 +2,7 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var ERROR_MESSAGE_TIMEOUT = 2500;
 
   window.photoInsert = function (evt, image, input, successHandler) {
     var file = evt.target.files[0];
@@ -13,7 +14,6 @@
 
     if (matches) {
       input.disabled = true;
-      window.util.showAlert('Загрузка..', 'lightblue', 700);
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
@@ -23,7 +23,7 @@
       });
       reader.readAsDataURL(file);
     } else {
-      window.util.showAlert('Выбран неподходящий формат файла', 'orange', 2500);
+      window.util.showAlert('Выбран неподходящий формат файла', 'orange', ERROR_MESSAGE_TIMEOUT);
     }
   };
 })();

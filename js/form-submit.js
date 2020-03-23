@@ -1,7 +1,6 @@
 'use strict';
 
 (function () {
-  var EMPTY_SPACE_IN_EDGES_MATCH = /^\s+|\s+(?!.)/g;
   var UPLOADING_MESSAGE_TIMEOUT = 100;
 
   var pageMain = document.querySelector('main');
@@ -18,7 +17,7 @@
   var showUploadingMessage = function (xhr) {
     uploadingMessage = uploadingMessageTemplate.cloneNode(true);
     uploadingMessage.addEventListener('keydown', function (evt) {
-      if (evt.key === window.util.ESC_KEY) {
+      if (evt.key === window.util.Key.ESC) {
         evt.stopPropagation();
         xhr.abort();
         uploadingMessage.remove();
@@ -49,9 +48,7 @@
     };
 
     var overlayEscPressHandler = function (evt) {
-      if (evt.key === window.util.ESC_KEY) {
-        closeResultMessage();
-      }
+      window.util.isEscEvent(evt, closeResultMessage);
     };
     document.addEventListener('keydown', overlayEscPressHandler);
 
@@ -88,8 +85,8 @@
     submitButton.disabled = true;
     isResultAlreadyReceived = false;
     hashTagInput.value = hashTagInput.value
-      .replace(EMPTY_SPACE_IN_EDGES_MATCH, '')
-      .replace(window.util.EMPTY_SPACE_MATCH, window.util.SPACE);
+      .replace(window.util.Regular.EMPTY_SPACE_IN_EDGES, '')
+      .replace(window.util.Regular.EMPTY_SPACE, window.util.SPACE);
     window.backend.save(showSuccessMessage, showErrorMessage, showUploadingMessage, new FormData(uploadForm));
   });
 })();
