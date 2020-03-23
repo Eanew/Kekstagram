@@ -58,8 +58,8 @@
     setDefaultUploadSettings();
   };
 
-  uploadInput.addEventListener('change', function () {
-    openUploadOverlay();
+  uploadInput.addEventListener('change', function (evt) {
+    window.photoInsert(evt, uploadPreviewImg, openUploadOverlay);
   });
 
   overlayCloseButton.addEventListener('click', function (evt) {
