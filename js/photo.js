@@ -13,19 +13,17 @@
     });
 
     if (matches) {
-      input.disabled = true;
-      label.style.opacity = '0.4';
+      window.util.disableInput(input, label);
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
-        input.disabled = false;
-        label.style.opacity = '';
+        window.util.enableInput(input, label);
         image.src = reader.result;
         successHandler();
       });
       reader.readAsDataURL(file);
     } else {
-      window.util.showAlert('Выбран неподходящий формат файла', 'orange', ERROR_MESSAGE_TIMEOUT);
+      window.util.showAlert('Выбран неподходящий формат изображения', 'orange', ERROR_MESSAGE_TIMEOUT);
     }
   };
 

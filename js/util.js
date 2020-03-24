@@ -34,6 +34,16 @@
     document.querySelector('body').classList.remove('modal-open');
   };
 
+  var disableInput = function (input, label) {
+    input.disabled = true;
+    label.style.opacity = '0.4';
+  };
+
+  var enableInput = function (input, label) {
+    input.disabled = false;
+    label.style.opacity = '';
+  };
+
   var showAlert = function (alert, color, timeout) {
     var message = document.createElement('div');
     message.textContent = alert;
@@ -59,6 +69,8 @@
     isEscEvent: isEscEvent,
     setModalOpenedMode: setModalOpenedMode,
     setModalClosedMode: setModalClosedMode,
+    disableInput: disableInput,
+    enableInput: enableInput,
     showAlert: showAlert
   };
 })();

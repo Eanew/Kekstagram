@@ -2,27 +2,49 @@
 
 (function () {
   var RequestStatus = {
-    SUCCESS: 200
+    SUCCESS: 200,
+    BAD_REQUEST: 400,
+    NOT_AUTHORIZED: 401,
+    NOT_FOUND: 404
   };
 
   var createRequest = function (method, url, successHandler, errorHandler, loadingHandler, data) {
+    var error;
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === RequestStatus.SUCCESS) {
-        successHandler(xhr.response);
-      } else {
-        errorHandler('Статус ответа' + xhr.status + ' ' + xhr.statusText);
+      switch (xhr.status) {
+        case RequestStatus.SUCCESS:
+          error = '';
+          successHandler(xhr.response);
+          break;
+        case RequestStatus.BAD_REQUEST:
+          error = 'Неверный запрос';
+          break;
+        case RequestStatus.NOT_AUTHORIZED:
+          error = 'Пользователь не авторизован';
+          break;
+        case RequestStatus.NOT_FOUND:
+          error = 'По вашему запросу ничего не найдено';
+          break;
+        default:
+          error = 'Статус ответа: ' + xhr.status + window.util.SPACE + xhr.statusText;
+      }
+      if (error) {
+        errorHandler(error);
       }
     });
 
     xhr.addEventListener('error', function () {
-      errorHandler('Ошибка соединения');
+      error = 'Нет подключения к интернету';
+      errorHandler(error);
     });
 
     xhr.addEventListener('timeout', function () {
-      errorHandler('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      var timeoutInSeconds = Math.floor(xhr.timeout / 1000);
+      error = 'Превышено время выполнения (' + timeoutInSeconds + ' секунд)';
+      errorHandler(error);
     });
 
     xhr.timeout = 10000;
