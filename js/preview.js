@@ -75,6 +75,10 @@
     evt.stopPropagation();
     selectedPicture = evt.currentTarget;
 
+    var formUploadMessage = document.querySelector('.img-upload__message');
+    if (formUploadMessage) {
+      formUploadMessage.classList.add('hidden');
+    }
     var picture = photos.filter(function (photo) {
       return photo.url === selectedPicture.querySelector('.picture__img').getAttribute('src');
     })[0];
