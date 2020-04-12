@@ -57,12 +57,12 @@
   };
 
   var loadData = function (successHandler, errorHandler) {
-    var URL = 'https://js.dump.academy/kekstagram/data';
+    var URL = 'https://javascript.pages.academy/kekstagram/data';
     createRequest('GET', URL, successHandler, errorHandler);
   };
 
   var saveData = function (successHandler, errorHandler, loadingHandler, data) {
-    var URL = 'https://js.dump.academy/kekstagram';
+    var URL = 'https://javascript.pages.academy/kekstagram';
     createRequest('POST', URL, successHandler, errorHandler, loadingHandler, data);
   };
 
