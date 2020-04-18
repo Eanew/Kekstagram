@@ -2,8 +2,8 @@
 
 (function () {
   var UPLOADING_MESSAGE_TIMEOUT = 100;
-  var ERROR_PREFIX = '<br><br><small>';
-  var ERROR_POSTFIX = '</small>';
+  var ERROR_DESCRIPTION_PREFIX = '<br><br><small>';
+  var ERROR_DESCRIPTION_POSTFIX = '</small>';
 
   var pageMain = document.querySelector('main');
   var uploadForm = document.querySelector('.img-upload__form');
@@ -65,7 +65,7 @@
 
     overlay.style.zIndex = '1000';
     if (error) {
-      message.innerHTML += (ERROR_PREFIX + error + ERROR_POSTFIX);
+      message.innerHTML += (ERROR_DESCRIPTION_PREFIX + error + ERROR_DESCRIPTION_POSTFIX);
     }
 
     var closeResultMessage = function () {

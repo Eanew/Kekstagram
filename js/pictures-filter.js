@@ -17,16 +17,10 @@
     });
   };
 
-  var renderPicturesTimeout;
-  var renderNewPictures = function (photos) {
-    if (renderPicturesTimeout) {
-      window.clearTimeout(renderPicturesTimeout);
-    }
-    renderPicturesTimeout = window.setTimeout(function () {
-      window.pictures.addToPage(photos);
-      window.preview.addClickHandler();
-    }, FILTER_REFRESH_TIMEOUT);
-  };
+  var renderNewPictures = window.debounce(function (photos) {
+    window.pictures.addToPage(photos);
+    window.preview.addClickHandler();
+  }, FILTER_REFRESH_TIMEOUT);
 
   var setActiveButton = function (evt) {
     if (evt.target && !evt.target.classList.contains(ACTIVE_BUTTON_CLASS)) {

@@ -5,7 +5,7 @@
   var SPACE = ' ';
 
   var Key = {
-    SPACE: ' ',
+    SPACE: SPACE,
     ESC: 'Escape',
     ENTER: 'Enter',
     ARROW_LEFT: 'ArrowLeft',
