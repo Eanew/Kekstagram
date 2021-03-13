@@ -1,7 +1,7 @@
-# Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
+# Личный проект «Кекстаграм»
 
 * Студент: [Александр Петров](https://up.htmlacademy.ru/javascript/19/user/345769).
-* Наставник: [Птетька Волобуев](https://htmlacademy.ru/profile/id635515).
+* Наставник: [Пётр Волобуев](https://htmlacademy.ru/profile/id635515).
 
 ## Описание
 
