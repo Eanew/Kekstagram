@@ -132,7 +132,8 @@
   };
 
   var loadErrorHandler = function (error) {
-    window.util.showAlert(('Ошибка загрузки данных: ' + error), 'orange', ERROR_MESSAGE_TIMEOUT);
+    // window.util.showAlert(('Ошибка загрузки данных: ' + error), 'orange', ERROR_MESSAGE_TIMEOUT);
+    loadSuccessHandler(window.data.photos)
   };
 
   window.backend.load(loadSuccessHandler, loadErrorHandler);
